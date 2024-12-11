@@ -1,30 +1,36 @@
 package main
 
 import (
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/engine"
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/game"
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/gamestate"
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/renderer"
+	"github.com/j4ndrw/the-chemical-apocalypse/internal/engine"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
+	drawsystems "github.com/j4ndrw/the-chemical-apocalypse/pkg/systems/draw"
+	updatesystems "github.com/j4ndrw/the-chemical-apocalypse/pkg/systems/update"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
 
 func main() {
-	state := gamestate.New()
+	world := world.New()
+	meta := meta.New(meta.Window{
+		Title:  "The Chemical Apocalypse",
+		Width:  640,
+		Height: 480,
+	}, 60)
 
-	exitHandler := engine.
-		Setup().
-		WithState(&state).
+	exitHandler := engine.Setup().
+		WithWorld(world).
+		WithMeta(meta).
 		Async().
 		Run()
 	defer exitHandler()
 
 	draw := engine.
-		Block(renderer.Clear, renderer.Rectangle).
-		WithState(&state).
-		Sync()
+		Block(drawsystems.Systems()...).
+		WithWorld(world).
+		WithMeta(meta)
 	update := engine.
-		Block(game.MovePlayerDown, game.MovePlayerRight).
-		WithState(&state).
-		Sync()
+		Block(updatesystems.Systems()...).
+		WithWorld(world).
+		WithMeta(meta)
 
 	engine.Loop(draw, update)
 }
