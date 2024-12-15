@@ -2,4 +2,7 @@ package entities
 
 import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
-type Player struct { components.Position }
+type Player struct {
+	components.Position
+	components.Speed
+}

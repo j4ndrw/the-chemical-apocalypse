@@ -10,13 +10,15 @@ type World struct {
 	Enemy  entities.Enemy
 }
 
-func New() *World {
+func Default() *World {
 	return &World{
 		Player: entities.Player{
-			Position: components.Position{X: 0, Y: 0},
+			Position: components.Position{X: 0, Y: 0, Width: 40, Height: 40},
+			Speed:    10,
 		},
 		Enemy: entities.Enemy{
-			Position: components.Position{X: 0, Y: 0},
+			Position: components.Position{X: 0, Y: 0, Width: 40, Height: 40},
+			Speed:    1,
 		},
 	}
 }

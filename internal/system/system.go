@@ -5,7 +5,7 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
 
-type System func(s *world.World, m *meta.Meta)
+type System func(w *world.World, m *meta.Meta)
 type SystemSlice []System
 
 func (s *SystemSlice) Register(system *System) *SystemSlice {
