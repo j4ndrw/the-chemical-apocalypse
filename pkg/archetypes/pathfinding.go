@@ -7,14 +7,11 @@ type pathfinding struct{}
 var PathFinding pathfinding = pathfinding{}
 
 type node struct {
-	Position      *components.Vector2
-	actualcost    float64
-	heuristiccost float64
-	totalcost     float64
-	parent        *node
+	Position *components.Vector2
+	distance float64
 }
 
-func (_ *pathfinding) heuristic(a, b *components.Vector2) float64 {
+func (_ *pathfinding) euclidianDistance(a, b *components.Vector2) float64 {
 	return float64((a.X-b.X)*(a.X-b.X) + (a.Y-b.Y)*(a.Y-b.Y))
 }
 
@@ -48,51 +45,38 @@ func (p *pathfinding) getNeighbors(
 func (p *pathfinding) findNearestNeighbor(
 	position *components.Vector2,
 	goal *components.Vector2,
-	actualcost float64,
-	closestNeighbor *node,
+	closest *node,
 ) *node {
-	neighbor := &node{Position: position}
-	if actualcost < neighbor.actualcost || neighbor.actualcost == 0 {
-		neighbor.actualcost = actualcost
-		neighbor.heuristiccost = p.heuristic(position, goal)
-		neighbor.totalcost = neighbor.actualcost + neighbor.heuristiccost
-	}
-
-	if closestNeighbor == nil || neighbor.totalcost < closestNeighbor.totalcost {
+	neighbor := &node{Position: position, distance: p.euclidianDistance(position, goal)}
+	if closest == nil || neighbor.distance < closest.distance {
 		return neighbor
 	}
-	return closestNeighbor
+	return closest
 }
 
 func (p *pathfinding) ClosestNeighbor(
-	start, goal *components.Vector2,
+	current, goal *components.Vector2,
 	mapNeighbor func(
 		position *components.Vector2,
 		direction *components.Vector2,
 	) *components.Vector2,
 	isNeighborValid func(position *components.Vector2) bool,
 ) *node {
-	current := &node{Position: start, actualcost: 0, heuristiccost: p.heuristic(start, goal)}
-	current.totalcost = current.actualcost + current.heuristiccost
-
-	if start.X == goal.X && start.Y == goal.Y {
+	if current.X == goal.X && current.Y == goal.Y {
 		return nil
 	}
 
-	neighbors := p.getNeighbors(current.Position, mapNeighbor, isNeighborValid)
-
-	var closestNeighbor *node = nil
-	for _, position := range neighbors {
-		closestNeighbor = p.findNearestNeighbor(
-			&position,
+	var closest *node = nil
+	for _, neighbor := range p.getNeighbors(
+		current,
+		mapNeighbor,
+		isNeighborValid,
+	) {
+		closest = p.findNearestNeighbor(
+			&neighbor,
 			goal,
-			current.actualcost+1,
-			closestNeighbor,
+			closest,
 		)
 	}
-
-	if closestNeighbor == nil {
-		return nil
-	}
-	return closestNeighbor
+	return closest
 }
