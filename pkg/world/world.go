@@ -13,12 +13,20 @@ type World struct {
 func Default() *World {
 	return &World{
 		Player: entities.Player{
-			Position: components.Position{X: 0, Y: 0, Width: 40, Height: 40},
-			Speed:    10,
+			Position: components.Position{
+				Vector2: components.Vector2{X: 0, Y: 0},
+				Width:   40,
+				Height:  40,
+			},
+			Speed: 10,
 		},
 		Enemy: entities.Enemy{
-			Position: components.Position{X: 0, Y: 0, Width: 40, Height: 40},
-			Speed:    1,
+			Position: components.Position{
+				Vector2: components.Vector2{X: 0, Y: 0},
+				Width:   40,
+				Height:  40,
+			},
+			Speed: 5,
 		},
 	}
 }
