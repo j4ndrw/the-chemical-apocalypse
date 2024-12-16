@@ -7,7 +7,7 @@ import (
 
 type World struct {
 	Player  entities.Player
-	Enemies []*entities.Enemy
+	Enemies map[components.Id]*entities.Enemy
 }
 
 func Default() *World {
@@ -15,11 +15,11 @@ func Default() *World {
 		Player: entities.Player{
 			Position: components.Position{
 				Vector2: components.Vector2{X: 0, Y: 0},
-				Width:   40,
-				Height:  40,
+				Width:   10,
+				Height:  10,
 			},
 			Speed: 10,
 		},
-		Enemies: []*entities.Enemy{},
+		Enemies: map[components.Id]*entities.Enemy{},
 	}
 }

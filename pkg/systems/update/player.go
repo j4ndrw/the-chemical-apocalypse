@@ -28,7 +28,7 @@ func (_ *player) HandleMovement() *system.System {
 					if archetypes.Collidable.IsColliding(
 						&w.Player.Position,
 						utils.SliceMap(
-							w.Enemies,
+							utils.MapValues(w.Enemies),
 							func(enemy *entities.Enemy) *components.Position {
 								return &enemy.Position
 							},

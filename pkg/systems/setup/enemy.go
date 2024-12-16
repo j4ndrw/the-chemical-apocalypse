@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
@@ -14,36 +15,36 @@ type enemy struct{}
 
 var Enemy enemy = enemy{}
 
-func (_ *enemy) CreateEnemies() *system.System {
-	width := int32(40)
-	height := int32(40)
-	minSpeed := components.Speed(1)
-	maxSpeed := components.Speed(3)
-	radius := 100 * int32(maxSpeed)
-
+func (_ *enemy) CreateEnemies(
+	howMany uint,
+	width int32,
+	height int32,
+	minSpeed components.Speed,
+	maxSpeed components.Speed,
+	aggroRadius int32,
+	maxRoamDuration uint,
+) *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		for i := 0; i < 9; i++ {
-			roamDuration := float32(rand.Intn(15) + 1)
-			w.Enemies = append(w.Enemies,
-				&entities.Enemy{
-					Position: components.Position{
-						Vector2: components.Vector2{X: 0, Y: 0},
-						Width:   width,
-						Height:  height,
-					},
-					MinSpeed: minSpeed,
-					MaxSpeed: maxSpeed,
-					Aggro: components.Aggro{
-						Aggro:  false,
-						Radius: radius,
-					},
-					Roam: components.Roam{Duration: roamDuration},
-				})
+		for i := 0; i < int(howMany); i++ {
+			roamDuration := float32(rand.Intn(int(maxRoamDuration) + 1))
+			id := archetypes.Id.Create()
+			w.Enemies[id] = &entities.Enemy{
+				Id: id,
+				Position: components.Position{
+					Vector2: components.Vector2{X: 0, Y: 0},
+					Width:   width,
+					Height:  height,
+				},
+				MinSpeed: minSpeed,
+				MaxSpeed: maxSpeed,
+				Aggro:    components.Aggro{Aggro: false, Radius: aggroRadius},
+				Roam:     components.Roam{Duration: roamDuration},
+			}
 		}
 	})
 }
 
-func (_ *enemy) PlaceEnemyInCenter() *system.System {
+func (_ *enemy) PlaceEnemiesInCenter() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {

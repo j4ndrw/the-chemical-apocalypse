@@ -52,6 +52,9 @@ func (_ *renderer) Enemies() *system.System {
 					Right:  m.Window.Width - enemy.Position.Width - 1,
 					Bottom: m.Window.Height - enemy.Position.Height - 1,
 				}
+
+				// TODO(j4ndrw): When you get to adding sprites, you'll have to change this
+				// so that it renders the sprite instead of the rectangle
 				rl.DrawRectangle(
 					enemy.Position.X,
 					enemy.Position.Y,
