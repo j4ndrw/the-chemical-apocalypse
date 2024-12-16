@@ -13,7 +13,7 @@ func (_ *aggro) LeaveAggro(aggro *components.Aggro) {
 	aggro.Aggro = false
 }
 
-func (_ *aggro) IsWithinAggroRange(target *components.Vector2, chaser *components.Vector2, aggro *components.Aggro) bool {
+func (_ *aggro) IsWithinAggroRange(target *components.Point, chaser *components.Point, aggro *components.Aggro) bool {
 	dx := target.X - chaser.X
 	dy := target.Y - chaser.Y
 	sqDistance := dx*dx + dy*dy

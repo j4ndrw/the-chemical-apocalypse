@@ -1,5 +1,5 @@
 package components
 
-type Vector2 struct {
+type Point struct {
 	X, Y          int32
 }

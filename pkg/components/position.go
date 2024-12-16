@@ -1,7 +1,7 @@
 package components
 
 type Position struct {
-	Vector2
+	Point
 	Width, Height int32
 	Bound         *Bound
 }

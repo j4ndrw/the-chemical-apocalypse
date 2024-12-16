@@ -7,12 +7,12 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 )
 
-type vector2 struct{}
+type point struct{}
 
-var Vector2 vector2 = vector2{}
+var Point point = point{}
 
-func (_ *vector2) RandomPointOnMap(w *meta.Window) components.Vector2 {
-	return components.Vector2{
+func (_ *point) RandomPointOnMap(w *meta.Window) components.Point {
+	return components.Point{
 		X: int32(rand.Intn(int(w.Width-1)) + 1),
 		Y: int32(rand.Intn(int(w.Height-1)) + 1),
 	}

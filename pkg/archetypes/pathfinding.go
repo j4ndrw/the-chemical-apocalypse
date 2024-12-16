@@ -7,20 +7,20 @@ type pathfinding struct{}
 var PathFinding pathfinding = pathfinding{}
 
 type node struct {
-	Position *components.Vector2
+	Position *components.Point
 	distance float64
 }
 
-func (_ *pathfinding) euclidianDistance(a, b *components.Vector2) float64 {
+func (_ *pathfinding) euclidianDistance(a, b *components.Point) float64 {
 	return float64((a.X-b.X)*(a.X-b.X) + (a.Y-b.Y)*(a.Y-b.Y))
 }
 
 func (p *pathfinding) getNeighbors(
-	pos *components.Vector2,
-	mapNeighbor func(position *components.Vector2, direction *components.Vector2) *components.Vector2,
-	isNeighborValid func(position *components.Vector2) bool,
-) []components.Vector2 {
-	directions := []components.Vector2{
+	pos *components.Point,
+	mapNeighbor func(position *components.Point, direction *components.Point) *components.Point,
+	isNeighborValid func(position *components.Point) bool,
+) []components.Point {
+	directions := []components.Point{
 		{X: 0, Y: 1},   // Up
 		{X: 1, Y: 0},   // Right
 		{X: 0, Y: -1},  // Down
@@ -31,7 +31,7 @@ func (p *pathfinding) getNeighbors(
 		{X: 1, Y: -1},  // Bottom right
 	}
 
-	var neighbors []components.Vector2
+	var neighbors []components.Point
 	for _, dir := range directions {
 		newPos := mapNeighbor(pos, &dir)
 		if isNeighborValid(newPos) {
@@ -43,8 +43,8 @@ func (p *pathfinding) getNeighbors(
 }
 
 func (p *pathfinding) findNearestNeighbor(
-	position *components.Vector2,
-	goal *components.Vector2,
+	position *components.Point,
+	goal *components.Point,
 	closest *node,
 ) *node {
 	neighbor := &node{Position: position, distance: p.euclidianDistance(position, goal)}
@@ -55,12 +55,12 @@ func (p *pathfinding) findNearestNeighbor(
 }
 
 func (p *pathfinding) ClosestNeighbor(
-	current, goal *components.Vector2,
+	current, goal *components.Point,
 	mapNeighbor func(
-		position *components.Vector2,
-		direction *components.Vector2,
-	) *components.Vector2,
-	isNeighborValid func(position *components.Vector2) bool,
+		position *components.Point,
+		direction *components.Point,
+	) *components.Point,
+	isNeighborValid func(position *components.Point) bool,
 ) *node {
 	if current.X == goal.X && current.Y == goal.Y {
 		return nil

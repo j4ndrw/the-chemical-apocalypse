@@ -14,7 +14,7 @@ func Default() *World {
 	return &World{
 		Player: entities.Player{
 			Position: components.Position{
-				Vector2: components.Vector2{X: 0, Y: 0},
+				Point: components.Point{X: 0, Y: 0},
 				Width:   10,
 				Height:  10,
 			},

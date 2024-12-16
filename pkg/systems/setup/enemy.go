@@ -31,7 +31,7 @@ func (_ *enemy) CreateEnemies(
 			w.Enemies[id] = &entities.Enemy{
 				Id: id,
 				Position: components.Position{
-					Vector2: components.Vector2{X: 0, Y: 0},
+					Point: components.Point{X: 0, Y: 0},
 					Width:   width,
 					Height:  height,
 				},

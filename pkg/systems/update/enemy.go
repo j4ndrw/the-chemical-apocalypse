@@ -22,7 +22,7 @@ func (_ *enemy) ChasePlayer() *system.System {
 
 				archetypes.MobMovement.Chase(
 					&enemy.Position,
-					&w.Player.Position.Vector2,
+					&w.Player.Position.Point,
 					enemy.MaxSpeed,
 					archetypes.Collidable.IsColliding(
 						&w.Player.Position,
@@ -44,7 +44,7 @@ func (_ *enemy) RoamMindlessly() *system.System {
 				}
 
 				if enemy.Roam.Timer <= 0 {
-					enemy.Roam.Direction = archetypes.Vector2.RandomPointOnMap(&m.Window)
+					enemy.Roam.Direction = archetypes.Point.RandomPointOnMap(&m.Window)
 					enemy.Roam.Timer = enemy.Roam.Duration
 					return
 				}
@@ -65,8 +65,8 @@ func (_ *enemy) WatchAggro() *system.System {
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
 				if archetypes.Aggro.IsWithinAggroRange(
-					&w.Player.Position.Vector2,
-					&enemy.Position.Vector2,
+					&w.Player.Position.Point,
+					&enemy.Position.Point,
 					&enemy.Aggro,
 				) {
 					archetypes.Aggro.EnterAggro(&enemy.Aggro)
