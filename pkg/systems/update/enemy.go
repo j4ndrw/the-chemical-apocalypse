@@ -3,7 +3,7 @@ package systems
 import (
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
@@ -12,24 +12,68 @@ type enemy struct{}
 
 var Enemy enemy = enemy{}
 
-func (_ *enemy) ApproachPlayer() *system.System {
+func (_ *enemy) ChasePlayer() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		player := w.Player.Position
-		enemy := w.Enemy.Position
+		for _, enemy := range w.Enemies {
+			func(enemy *entities.Enemy) {
+				if !enemy.Aggro.Aggro {
+					return
+				}
 
-		neighbor := archetypes.PathFinding.ClosestNeighbor(
-			&enemy.Vector2,
-			&player.Vector2,
-			func(position, direction *components.Vector2) *components.Vector2 {
-				return &components.Vector2{X: position.X + direction.X*int32(w.Enemy.Speed), Y: position.Y + direction.Y*int32(w.Enemy.Speed)}
-			},
-			func(position *components.Vector2) bool {
-				return !archetypes.Collidable.IsColliding(&w.Player.Position, &w.Enemy.Position)
-			},
-		)
+				archetypes.MobMovement.Chase(
+					&enemy.Position,
+					&w.Player.Position.Vector2,
+					enemy.MaxSpeed,
+					archetypes.Collidable.IsColliding(
+						&w.Player.Position,
+						&enemy.Position,
+					),
+				)
+			}(enemy)
+		}
+	})
+}
 
-		if neighbor != nil {
-			w.Enemy.Position.Vector2 = *neighbor.Position
+func (_ *enemy) RoamMindlessly() *system.System {
+	return system.Create(func(w *world.World, m *meta.Meta) {
+		for _, enemy := range w.Enemies {
+			func(enemy *entities.Enemy) {
+				if enemy.Aggro.Aggro {
+					enemy.Roam.Timer = 0
+					return
+				}
+
+				if enemy.Roam.Timer <= 0 {
+					enemy.Roam.Direction = archetypes.Vector2.RandomPointOnMap(&m.Window)
+					enemy.Roam.Timer = enemy.Roam.Duration
+					return
+				}
+
+				archetypes.MobMovement.Chase(
+					&enemy.Position,
+					&enemy.Roam.Direction,
+					enemy.MinSpeed,
+				)
+				enemy.Roam.Timer -= m.DeltaTime
+			}(enemy)
+		}
+	})
+}
+
+func (_ *enemy) WatchAggro() *system.System {
+	return system.Create(func(w *world.World, m *meta.Meta) {
+		for _, enemy := range w.Enemies {
+			func(enemy *entities.Enemy) {
+				if archetypes.Aggro.IsWithinAggroRange(
+					&w.Player.Position.Vector2,
+					&enemy.Position.Vector2,
+					&enemy.Aggro,
+				) {
+					archetypes.Aggro.EnterAggro(&enemy.Aggro)
+				} else {
+					archetypes.Aggro.LeaveAggro(&enemy.Aggro)
+				}
+			}(enemy)
 		}
 	})
 }

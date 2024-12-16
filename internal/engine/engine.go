@@ -57,7 +57,7 @@ func Setup(systems ...system.System) EngineBuilder {
 
 		for _, function := range systems {
 			if options.parallel {
-				go function(options.world, options.meta)
+				function(options.world, options.meta)
 			} else {
 				function(options.world, options.meta)
 			}
@@ -95,7 +95,7 @@ func Block(systems ...system.System) EngineBuilder {
 	options.Run = func() func() {
 		for _, function := range systems {
 			if options.parallel {
-				go function(options.world, options.meta)
+				function(options.world, options.meta)
 			} else {
 				function(options.world, options.meta)
 			}

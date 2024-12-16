@@ -6,4 +6,5 @@ var Systems system.SystemSlice = *system.
 	Slice().
 	Register(Renderer.Clear()).
 	Register(Renderer.Player()).
-	Register(Renderer.Enemy())
+	Register(Renderer.Enemies()).
+	Register(Meta.UpdateDeltaTime())

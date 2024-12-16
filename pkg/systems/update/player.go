@@ -3,7 +3,10 @@ package systems
 import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
+	"github.com/j4ndrw/the-chemical-apocalypse/internal/utils"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
@@ -22,7 +25,15 @@ func (_ *player) HandleMovement() *system.System {
 			for _, key := range keys {
 				if rl.IsKeyDown(key) {
 					moveFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
-					if archetypes.Collidable.IsColliding(&w.Player.Position, &w.Enemy.Position) {
+					if archetypes.Collidable.IsColliding(
+						&w.Player.Position,
+						utils.SliceMap(
+							w.Enemies,
+							func(enemy *entities.Enemy) *components.Position {
+								return &enemy.Position
+							},
+						)...,
+					) {
 						undoFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
 					}
 					return

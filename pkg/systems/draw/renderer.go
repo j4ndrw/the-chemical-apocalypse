@@ -4,6 +4,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
@@ -41,25 +42,29 @@ func (_ *renderer) Player() *system.System {
 	})
 }
 
-func (_ *renderer) Enemy() *system.System {
+func (_ *renderer) Enemies() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		w.Enemy.Position.Bound = &components.Bound{
-			Left:   1,
-			Top:    1,
-			Right:  m.Window.Width - w.Enemy.Position.Width - 1,
-			Bottom: m.Window.Height - w.Enemy.Position.Height - 1,
+		for _, enemy := range w.Enemies {
+			func(enemy *entities.Enemy) {
+				enemy.Position.Bound = &components.Bound{
+					Left:   1,
+					Top:    1,
+					Right:  m.Window.Width - enemy.Position.Width - 1,
+					Bottom: m.Window.Height - enemy.Position.Height - 1,
+				}
+				rl.DrawRectangle(
+					enemy.Position.X,
+					enemy.Position.Y,
+					enemy.Position.Width,
+					enemy.Position.Height,
+					rl.Color{
+						0xFF,
+						0,
+						0,
+						0xFF,
+					},
+				)
+			}(enemy)
 		}
-		rl.DrawRectangle(
-			w.Enemy.Position.X,
-			w.Enemy.Position.Y,
-			w.Enemy.Position.Width,
-			w.Enemy.Position.Height,
-			rl.Color{
-				0xFF,
-				0,
-				0,
-				0xFF,
-			},
-		)
 	})
 }

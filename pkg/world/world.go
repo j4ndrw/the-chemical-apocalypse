@@ -6,8 +6,8 @@ import (
 )
 
 type World struct {
-	Player entities.Player
-	Enemy  entities.Enemy
+	Player  entities.Player
+	Enemies []*entities.Enemy
 }
 
 func Default() *World {
@@ -20,13 +20,6 @@ func Default() *World {
 			},
 			Speed: 10,
 		},
-		Enemy: entities.Enemy{
-			Position: components.Position{
-				Vector2: components.Vector2{X: 0, Y: 0},
-				Width:   40,
-				Height:  40,
-			},
-			Speed: 5,
-		},
+		Enemies: []*entities.Enemy{},
 	}
 }
