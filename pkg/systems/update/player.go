@@ -14,20 +14,25 @@ var Player player = player{}
 
 func (_ *player) HandleMovement() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if rl.IsKeyDown(rl.KeyW) || rl.IsKeyDown(rl.KeyUp) {
-			archetypes.Movable.MoveUp(&m.Window, &w.Player.Position, &w.Player.Speed)
+		handle := func(
+			moveFunction archetypes.MoveFn,
+			undoFunction archetypes.MoveFn,
+			keys ...int32,
+		) {
+			for _, key := range keys {
+				if rl.IsKeyDown(key) {
+					moveFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
+					if archetypes.Collidable.IsColliding(&w.Player.Position, &w.Enemy.Position) {
+						undoFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
+					}
+					return
+				}
+			}
 		}
 
-		if rl.IsKeyDown(rl.KeyS) || rl.IsKeyDown(rl.KeyDown) {
-			archetypes.Movable.MoveDown(&m.Window, &w.Player.Position, &w.Player.Speed)
-		}
-
-		if rl.IsKeyDown(rl.KeyA) || rl.IsKeyDown(rl.KeyLeft) {
-			archetypes.Movable.MoveLeft(&m.Window, &w.Player.Position, &w.Player.Speed)
-		}
-
-		if rl.IsKeyDown(rl.KeyD) || rl.IsKeyDown(rl.KeyRight) {
-			archetypes.Movable.MoveRight(&m.Window, &w.Player.Position, &w.Player.Speed)
-		}
+		handle(archetypes.Movable.MoveUp, archetypes.Movable.MoveDown, rl.KeyW, rl.KeyUp)
+		handle(archetypes.Movable.MoveDown, archetypes.Movable.MoveUp, rl.KeyS, rl.KeyDown)
+		handle(archetypes.Movable.MoveLeft, archetypes.Movable.MoveRight, rl.KeyA, rl.KeyLeft)
+		handle(archetypes.Movable.MoveRight, archetypes.Movable.MoveLeft, rl.KeyD, rl.KeyRight)
 	})
 }

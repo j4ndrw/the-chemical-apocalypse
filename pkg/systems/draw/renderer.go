@@ -26,7 +26,6 @@ func (_ *renderer) Player() *system.System {
 			Right:  m.Window.Width - w.Player.Position.Width - 1,
 			Bottom: m.Window.Height - w.Player.Position.Height - 1,
 		}
-
 		rl.DrawRectangle(
 			w.Player.Position.X,
 			w.Player.Position.Y,
