@@ -8,14 +8,13 @@ import (
 )
 
 type EngineBuilder struct {
-	parallel  bool
-	Run       func() func()
-	Async     func() *EngineBuilder
-	Sync      func() *EngineBuilder
-	world     *world.World
-	meta      *meta.Meta
-	WithWorld func(s *world.World) *EngineBuilder
-	WithMeta  func(m *meta.Meta) *EngineBuilder
+	deferredHandler     func()
+	Run                 func() func()
+	world               *world.World
+	meta                *meta.Meta
+	WithWorld           func(s *world.World) *EngineBuilder
+	WithMeta            func(m *meta.Meta) *EngineBuilder
+	WithDeferredHandler func(func()) *EngineBuilder
 }
 
 type EngineLoop struct {
@@ -28,59 +27,8 @@ type EngineLoop struct {
 	Run            func() func()
 }
 
-func Setup(systems ...system.System) EngineBuilder {
-	options := EngineBuilder{parallel: false}
-
-	options.Async = func() *EngineBuilder {
-		options.parallel = true
-		return &options
-	}
-
-	options.Sync = func() *EngineBuilder {
-		options.parallel = false
-		return &options
-	}
-
-	options.WithWorld = func(s *world.World) *EngineBuilder {
-		options.world = s
-		return &options
-	}
-
-	options.WithMeta = func(m *meta.Meta) *EngineBuilder {
-		options.meta = m
-		return &options
-	}
-
-	options.Run = func() func() {
-		rl.InitWindow(options.meta.Window.Width, options.meta.Window.Height, options.meta.Window.Title)
-		rl.SetTargetFPS(options.meta.TargetFPS)
-
-		for _, function := range systems {
-			if options.parallel {
-				function(options.world, options.meta)
-			} else {
-				function(options.world, options.meta)
-			}
-		}
-
-		return rl.CloseWindow
-	}
-
-	return options
-}
-
 func Block(systems ...system.System) EngineBuilder {
-	options := EngineBuilder{parallel: false}
-
-	options.Async = func() *EngineBuilder {
-		options.parallel = true
-		return &options
-	}
-
-	options.Sync = func() *EngineBuilder {
-		options.parallel = false
-		return &options
-	}
+	options := EngineBuilder{}
 
 	options.WithWorld = func(s *world.World) *EngineBuilder {
 		options.world = s
@@ -92,15 +40,16 @@ func Block(systems ...system.System) EngineBuilder {
 		return &options
 	}
 
+	options.WithDeferredHandler = func(handler func()) *EngineBuilder {
+		options.deferredHandler = handler
+		return &options
+	}
+
 	options.Run = func() func() {
 		for _, function := range systems {
-			if options.parallel {
-				function(options.world, options.meta)
-			} else {
-				function(options.world, options.meta)
-			}
+			function(options.world, options.meta)
 		}
-		return func() {}
+		return options.deferredHandler
 	}
 
 	return options

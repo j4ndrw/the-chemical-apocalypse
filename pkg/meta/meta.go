@@ -1,5 +1,9 @@
 package meta
 
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
+
 type Window struct {
 	Width  int32
 	Height int32
@@ -15,6 +19,7 @@ type Meta struct {
 	Window    Window
 	TargetFPS int32
 	DeltaTime float32
+	Font      rl.Font
 }
 
 func New(window Window, targetFPS int32) *Meta {
@@ -25,9 +30,8 @@ func New(window Window, targetFPS int32) *Meta {
 }
 
 func Default() *Meta {
-	return New(Window{
-		Title:  "The Chemical Apocalypse",
-		Width:  1280,
-		Height: 720,
-	}, 60)
+	return New(
+		Window{Title:  "The Chemical Apocalypse"},
+		60,
+	)
 }

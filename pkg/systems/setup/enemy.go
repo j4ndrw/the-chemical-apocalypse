@@ -1,6 +1,7 @@
 package systems
 
 import (
+	"log/slog"
 	"math/rand"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -48,6 +49,7 @@ func (_ *enemy) CreateEnemies(
 
 func (_ *enemy) PlaceEnemiesInCenter() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
+		slog.Info("Meta", "windowwidth", m.Window.Width, "windowheight", m.Window.Height)
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
 				enemy.Position.X = int32((rand.Intn(int(m.Window.Width))+int(m.Window.Width/3))/2 - 1)
