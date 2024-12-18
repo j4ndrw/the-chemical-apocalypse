@@ -1,12 +1,10 @@
 package systems
 
 import (
-	"math"
-	"math/rand"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/utils"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
@@ -23,56 +21,61 @@ func (_ *renderer) Clear() *system.System {
 }
 
 func (_ *renderer) DrawTitleScreen() *system.System {
-	frame := int32(0)
-	shakeOffset := func(randomNumber float32, frame int32) float32 {
-		if frame%utils.RandomBetween(100, 250) == 0 {
-			return randomNumber
-		}
-		return 0
-	}
+	draw, next := archetypes.RenderChaoticChar.Draw(func(frame int32) bool {
+		return frame%utils.RandomBetween(100, 250) == 0
+	})
 
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeTitleScreen {
 			return
 		}
 
-		if frame > math.MaxInt32 {
-			frame = 0 // trying to avoid int overflows
-		}
-
-		fontSize := float32(m.Window.Width / 25)
-		characterSpacing := float32(fontSize / 2.25)
-		sizes := rl.MeasureTextEx(
+		titleFontSize := float32(m.Window.Width / 25)
+		titleCharacterSpacing := float32(titleFontSize / 2.25)
+		titleSizes := rl.MeasureTextEx(
 			m.Font,
 			m.Window.Title,
-			fontSize,
+			titleFontSize,
 			0,
 		)
-
-		x := (float32(m.Window.Width) - sizes.X/1.25) / 2
-		y := (float32(m.Window.Height) - sizes.Y) / 2
+		titleX := (float32(m.Window.Width) - titleSizes.X/1.25) / 2
+		titleY := (float32(m.Window.Height) - titleSizes.Y) / 2
 
 		for idx, char := range m.Window.Title {
-			baseAmplitude := float32(5)
-			amplitude := baseAmplitude + shakeOffset(float32(rand.Intn(50)), frame)
-
-			baseFrequency := float32(0.01)
-			frequency := baseFrequency + shakeOffset(float32(rand.Float64()*0.75), frame)
-
-			yOffset := amplitude * float32(math.Sin(float64(frequency*float32(frame))+float64(idx)))
-
-			rl.DrawTextCodepoint(
-				m.Font,
-				char,
-				rl.Vector2{
-					X: x + characterSpacing*float32(idx),
-					Y: y + (yOffset*2),
-				},
-				fontSize,
-				rl.Color{0xFF, 0xFF, 0xFF, 0xFF},
+			draw(
+				m,
+				char, idx,
+				5, 50,
+				0.05, 0.75,
+				titleFontSize, titleCharacterSpacing,
+				titleX, titleY,
 			)
 		}
-		frame++
+
+		startYourJourneyText := "Press ENTER / START to begin your journey..."
+		startYourJourneyFontSize := float32(m.Window.Width / 60)
+		startYourJourneyCharacterSpacing := float32(startYourJourneyFontSize / 2.25)
+		startYourJourneySizes := rl.MeasureTextEx(
+			m.Font,
+			startYourJourneyText,
+			startYourJourneyFontSize,
+			0,
+		)
+		startYourJourneyX := (float32(m.Window.Width) - startYourJourneySizes.X/1.25) / 2
+		startYourJourneyY := (float32(m.Window.Height) - startYourJourneySizes.Y) / 2
+
+		for idx, char := range startYourJourneyText {
+			draw(
+				m,
+				char, idx,
+				1, 10,
+				0.05, 0.5,
+				startYourJourneyFontSize, startYourJourneyCharacterSpacing,
+				startYourJourneyX, startYourJourneyY+150,
+			)
+		}
+
+		next()
 	})
 }
 

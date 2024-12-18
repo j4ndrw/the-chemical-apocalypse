@@ -14,7 +14,9 @@ var Enemy = enemy{}
 
 func (_ *enemy) ChasePlayer() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if w.CurrentMode != world.WorldModeExploration { return }
+		if w.CurrentMode != world.WorldModeExploration {
+			return
+		}
 
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
@@ -38,7 +40,9 @@ func (_ *enemy) ChasePlayer() *system.System {
 
 func (_ *enemy) RoamMindlessly() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if w.CurrentMode != world.WorldModeExploration { return }
+		if w.CurrentMode != world.WorldModeExploration {
+			return
+		}
 
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
@@ -66,7 +70,9 @@ func (_ *enemy) RoamMindlessly() *system.System {
 
 func (_ *enemy) WatchAggro() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if w.CurrentMode != world.WorldModeExploration { return }
+		if w.CurrentMode != world.WorldModeExploration {
+			return
+		}
 
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
