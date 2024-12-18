@@ -4,7 +4,7 @@ import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
 type Enemy struct {
 	components.Id
-	components.Position
+	components.Hitbox
 	MinSpeed components.Speed
 	MaxSpeed components.Speed
 	components.Aggro

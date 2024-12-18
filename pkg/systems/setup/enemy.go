@@ -3,6 +3,7 @@ package systems
 import (
 	"math/rand"
 
+	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
@@ -13,7 +14,7 @@ import (
 
 type enemy struct{}
 
-var Enemy enemy = enemy{}
+var Enemy = enemy{}
 
 func (_ *enemy) CreateEnemies(
 	howMany uint,
@@ -30,10 +31,11 @@ func (_ *enemy) CreateEnemies(
 			id := archetypes.Id.Create()
 			w.Enemies[id] = &entities.Enemy{
 				Id: id,
-				Position: components.Position{
-					Point: components.Point{X: 0, Y: 0},
-					Width:   width,
-					Height:  height,
+				Hitbox: components.Hitbox{
+					Position: components.Position{X: 0, Y: 0},
+					Width:    width,
+					Height:   height,
+					Color:    rl.Color{0xFF, 0, 0, 0xFF},
 				},
 				MinSpeed: minSpeed,
 				MaxSpeed: maxSpeed,

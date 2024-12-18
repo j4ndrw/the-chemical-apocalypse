@@ -5,4 +5,4 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 )
 
-type MoveFn func(w *meta.Window, p *components.Position, s *components.Speed)
+type MoveFn func(w *meta.Window, h *components.Hitbox, s *components.Speed)

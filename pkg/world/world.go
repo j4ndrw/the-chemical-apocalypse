@@ -6,20 +6,13 @@ import (
 )
 
 type World struct {
-	Player  entities.Player
-	Enemies map[components.Id]*entities.Enemy
+	Player      entities.Player
+	Enemies     map[components.Id]*entities.Enemy
 }
 
 func Default() *World {
 	return &World{
-		Player: entities.Player{
-			Position: components.Position{
-				Point: components.Point{X: 0, Y: 0},
-				Width:   10,
-				Height:  10,
-			},
-			Speed: 10,
-		},
+		Player:  entities.Player{},
 		Enemies: map[components.Id]*entities.Enemy{},
 	}
 }

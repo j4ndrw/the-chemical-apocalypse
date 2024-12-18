@@ -9,7 +9,7 @@ import (
 
 type metasystem struct{}
 
-var Meta metasystem = metasystem{}
+var Meta = metasystem{}
 
 func (_ *metasystem) UpdateDeltaTime() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {

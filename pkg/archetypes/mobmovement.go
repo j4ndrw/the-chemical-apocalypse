@@ -4,21 +4,21 @@ import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
 type mobmovement struct{}
 
-var MobMovement mobmovement = mobmovement{}
+var MobMovement = mobmovement{}
 
 func (_ *mobmovement) Chase(
-	chaser *components.Position,
-	target *components.Point,
+	chaser *components.Hitbox,
+	target *components.Position,
 	speed components.Speed,
 	collisions ...bool,
 ) {
 	neighbor := PathFinding.ClosestNeighbor(
-		&chaser.Point,
+		&chaser.Position,
 		target,
-		func(position, direction *components.Point) *components.Point {
-			return &components.Point{X: position.X + direction.X*int32(speed), Y: position.Y + direction.Y*int32(speed)}
+		func(position, direction *components.Position) *components.Position {
+			return &components.Position{X: position.X + direction.X*int32(speed), Y: position.Y + direction.Y*int32(speed)}
 		},
-		func(position *components.Point) bool {
+		func(position *components.Position) bool {
 			for _, collision := range collisions {
 				if collision {
 					return false
@@ -29,6 +29,6 @@ func (_ *mobmovement) Chase(
 	)
 
 	if neighbor != nil {
-		chaser.Point = *neighbor.Position
+		chaser.Position = *neighbor.Position
 	}
 }

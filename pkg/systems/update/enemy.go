@@ -10,7 +10,7 @@ import (
 
 type enemy struct{}
 
-var Enemy enemy = enemy{}
+var Enemy = enemy{}
 
 func (_ *enemy) ChasePlayer() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
@@ -21,12 +21,12 @@ func (_ *enemy) ChasePlayer() *system.System {
 				}
 
 				archetypes.MobMovement.Chase(
-					&enemy.Position,
-					&w.Player.Position.Point,
+					&enemy.Hitbox,
+					&w.Player.Hitbox.Position,
 					enemy.MaxSpeed,
 					archetypes.Collidable.IsColliding(
-						&w.Player.Position,
-						&enemy.Position,
+						&w.Player.Hitbox,
+						&enemy.Hitbox,
 					),
 				)
 			}(enemy)
@@ -44,13 +44,13 @@ func (_ *enemy) RoamMindlessly() *system.System {
 				}
 
 				if enemy.Roam.Timer <= 0 {
-					enemy.Roam.Direction = archetypes.Point.RandomPointOnMap(&m.Window)
+					enemy.Roam.Direction = archetypes.Position.RandomPointOnMap(&m.Window)
 					enemy.Roam.Timer = enemy.Roam.Duration
 					return
 				}
 
 				archetypes.MobMovement.Chase(
-					&enemy.Position,
+					&enemy.Hitbox,
 					&enemy.Roam.Direction,
 					enemy.MinSpeed,
 				)
@@ -65,8 +65,8 @@ func (_ *enemy) WatchAggro() *system.System {
 		for _, enemy := range w.Enemies {
 			func(enemy *entities.Enemy) {
 				if archetypes.Aggro.IsWithinAggroRange(
-					&w.Player.Position.Point,
-					&enemy.Position.Point,
+					&w.Player.Hitbox.Position,
+					&enemy.Hitbox.Position,
 					&enemy.Aggro,
 				) {
 					archetypes.Aggro.EnterAggro(&enemy.Aggro)

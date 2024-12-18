@@ -4,23 +4,23 @@ import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
 type pathfinding struct{}
 
-var PathFinding pathfinding = pathfinding{}
+var PathFinding = pathfinding{}
 
 type node struct {
-	Position *components.Point
+	Position *components.Position
 	distance float64
 }
 
-func (_ *pathfinding) euclidianDistance(a, b *components.Point) float64 {
+func (_ *pathfinding) euclidianDistance(a, b *components.Position) float64 {
 	return float64((a.X-b.X)*(a.X-b.X) + (a.Y-b.Y)*(a.Y-b.Y))
 }
 
 func (p *pathfinding) getNeighbors(
-	pos *components.Point,
-	mapNeighbor func(position *components.Point, direction *components.Point) *components.Point,
-	isNeighborValid func(position *components.Point) bool,
-) []components.Point {
-	directions := []components.Point{
+	pos *components.Position,
+	mapNeighbor func(position *components.Position, direction *components.Position) *components.Position,
+	isNeighborValid func(position *components.Position) bool,
+) []components.Position {
+	directions := []components.Position{
 		{X: 0, Y: 1},   // Up
 		{X: 1, Y: 0},   // Right
 		{X: 0, Y: -1},  // Down
@@ -31,7 +31,7 @@ func (p *pathfinding) getNeighbors(
 		{X: 1, Y: -1},  // Bottom right
 	}
 
-	var neighbors []components.Point
+	var neighbors []components.Position
 	for _, dir := range directions {
 		newPos := mapNeighbor(pos, &dir)
 		if isNeighborValid(newPos) {
@@ -43,8 +43,8 @@ func (p *pathfinding) getNeighbors(
 }
 
 func (p *pathfinding) findNearestNeighbor(
-	position *components.Point,
-	goal *components.Point,
+	position *components.Position,
+	goal *components.Position,
 	closest *node,
 ) *node {
 	neighbor := &node{Position: position, distance: p.euclidianDistance(position, goal)}
@@ -55,12 +55,12 @@ func (p *pathfinding) findNearestNeighbor(
 }
 
 func (p *pathfinding) ClosestNeighbor(
-	current, goal *components.Point,
+	current, goal *components.Position,
 	mapNeighbor func(
-		position *components.Point,
-		direction *components.Point,
-	) *components.Point,
-	isNeighborValid func(position *components.Point) bool,
+		position *components.Position,
+		direction *components.Position,
+	) *components.Position,
+	isNeighborValid func(position *components.Position) bool,
 ) *node {
 	if current.X == goal.X && current.Y == goal.Y {
 		return nil

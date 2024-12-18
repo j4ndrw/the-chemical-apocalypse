@@ -1,7 +1,7 @@
 package components
 
 type Roam struct {
-	Direction Point
+	Direction Position
 	Timer     float32
 	Duration  float32
 }

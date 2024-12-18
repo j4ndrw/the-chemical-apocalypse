@@ -7,32 +7,32 @@ import (
 
 type movable struct{}
 
-var Movable movable = movable{}
+var Movable = movable{}
 
-func (_ *movable) MoveUp(w *meta.Window, p *components.Position, s *components.Speed) {
-	if p.Y < p.Bound.Top {
+func (_ *movable) MoveUp(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+	if h.Y < h.Bound.Top {
 		return
 	}
-	p.Y -= int32(*s)
+	h.Y -= int32(*s)
 }
 
-func (_ *movable) MoveDown(w *meta.Window, p *components.Position, s *components.Speed) {
-	if p.Y > p.Bound.Bottom {
+func (_ *movable) MoveDown(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+	if h.Y > h.Bound.Bottom {
 		return
 	}
-	p.Y += int32(*s)
+	h.Y += int32(*s)
 }
 
-func (_ *movable) MoveLeft(w *meta.Window, p *components.Position, s *components.Speed) {
-	if p.X < p.Bound.Left {
+func (_ *movable) MoveLeft(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+	if h.X < h.Bound.Left {
 		return
 	}
-	p.X -= int32(*s)
+	h.X -= int32(*s)
 }
 
-func (_ *movable) MoveRight(w *meta.Window, p *components.Position, s *components.Speed) {
-	if p.X > p.Bound.Right {
+func (_ *movable) MoveRight(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+	if h.X > h.Bound.Right {
 		return
 	}
-	p.X += int32(*s)
+	h.X += int32(*s)
 }

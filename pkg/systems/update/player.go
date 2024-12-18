@@ -13,7 +13,7 @@ import (
 
 type player struct{}
 
-var Player player = player{}
+var Player = player{}
 
 func (_ *player) HandleMovement() *system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
@@ -24,17 +24,17 @@ func (_ *player) HandleMovement() *system.System {
 		) {
 			for _, key := range keys {
 				if rl.IsKeyDown(key) {
-					moveFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
+					moveFunction(&m.Window, &w.Player.Hitbox, &w.Player.Speed)
 					if archetypes.Collidable.IsColliding(
-						&w.Player.Position,
+						&w.Player.Hitbox,
 						utils.SliceMap(
 							utils.MapValues(w.Enemies),
-							func(enemy *entities.Enemy) *components.Position {
-								return &enemy.Position
+							func(enemy *entities.Enemy) *components.Hitbox {
+								return &enemy.Hitbox
 							},
 						)...,
 					) {
-						undoFunction(&m.Window, &w.Player.Position, &w.Player.Speed)
+						undoFunction(&m.Window, &w.Player.Hitbox, &w.Player.Speed)
 					}
 					return
 				}

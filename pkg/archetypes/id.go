@@ -7,7 +7,7 @@ import (
 
 type id struct{}
 
-var Id id = id{}
+var Id = id{}
 
 func (_ *id) Create() components.Id {
 	return components.Id(uuid.New().String())
