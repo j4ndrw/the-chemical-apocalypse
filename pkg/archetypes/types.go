@@ -6,3 +6,10 @@ import (
 )
 
 type MoveFn func(w *meta.Window, h *components.Hitbox, s *components.Speed)
+type ChaseFn func(
+	chaser *components.Hitbox,
+	target *components.Position,
+	speed components.Speed,
+	deltaTime float64,
+	collisions ...bool,
+)

@@ -30,9 +30,9 @@ var Systems system.SystemSlice = *system.
 		1,
 		100,
 		100,
-		1,
-		3,
+		2,
+		5,
 		300,
-		15,
+		10,
 	)).
 	Register(Enemy.PlaceEnemiesInCenter())

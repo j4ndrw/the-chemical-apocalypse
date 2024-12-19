@@ -24,10 +24,11 @@ func (_ *enemy) ChasePlayer() *system.System {
 					return
 				}
 
-				archetypes.MobMovement.Chase(
+				archetypes.MobMovement.NaiveChase(
 					&enemy.Hitbox,
 					&w.Player.Hitbox.Position,
 					enemy.MaxSpeed,
+					float64(m.DeltaTime),
 					archetypes.Collidable.IsColliding(
 						&w.Player.Hitbox,
 						&enemy.Hitbox,
@@ -57,10 +58,11 @@ func (_ *enemy) RoamMindlessly() *system.System {
 					return
 				}
 
-				archetypes.MobMovement.Chase(
+				archetypes.MobMovement.NaiveChase(
 					&enemy.Hitbox,
 					&enemy.Roam.Direction,
 					enemy.MinSpeed,
+					float64(m.DeltaTime),
 				)
 				enemy.Roam.Timer -= m.DeltaTime
 			}(enemy)
