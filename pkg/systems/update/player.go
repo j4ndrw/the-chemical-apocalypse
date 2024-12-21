@@ -15,7 +15,7 @@ type player struct{}
 
 var Player = player{}
 
-func (_ *player) HandleMovement() *system.System {
+func (_ *player) HandleMovement() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeExploration { return }
 

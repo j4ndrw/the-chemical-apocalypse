@@ -6,6 +6,8 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/utils"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
 
 var Systems system.SystemSlice = *system.
@@ -35,4 +37,8 @@ var Systems system.SystemSlice = *system.
 		300,
 		10,
 	)).
-	Register(Enemy.PlaceEnemiesInCenter())
+	Register(func(w *world.World, m *meta.Meta) {
+		for _, enemy := range w.Enemies {
+			Enemy.PlaceEnemyInCenter(enemy).Apply(w, m)
+		}
+	})

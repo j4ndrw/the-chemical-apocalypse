@@ -10,7 +10,7 @@ type worldmode struct{}
 
 var WorldMode = worldmode{}
 
-func (_ *worldmode) Init() *system.System {
+func (_ *worldmode) Init() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		w.PrevMode = world.WorldModeNil
 		w.CurrentMode = world.WorldModeTitleScreen

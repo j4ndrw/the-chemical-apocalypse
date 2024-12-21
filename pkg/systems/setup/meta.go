@@ -11,13 +11,13 @@ type metasystem struct{}
 
 var Meta = metasystem{}
 
-func (_ *metasystem) SetConfigFlags(flags uint32) *system.System {
+func (_ *metasystem) SetConfigFlags(flags uint32) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		rl.SetConfigFlags(flags)
 	})
 }
 
-func (_ *metasystem) InitWindow() *system.System {
+func (_ *metasystem) InitWindow() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		rl.InitWindow(1, 1, m.Window.Title)
 
@@ -29,14 +29,14 @@ func (_ *metasystem) InitWindow() *system.System {
 	})
 }
 
-func (_ *metasystem) SetTargetFPS(fps int32) *system.System {
+func (_ *metasystem) SetTargetFPS(fps int32) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		m.TargetFPS = fps
 		rl.SetTargetFPS(m.TargetFPS)
 	})
 }
 
-func (_ *metasystem) LoadFont(path string) *system.System {
+func (_ *metasystem) LoadFont(path string) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		m.Font = rl.LoadFont(path)
 	})

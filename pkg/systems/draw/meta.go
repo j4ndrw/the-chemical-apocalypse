@@ -11,7 +11,7 @@ type metasystem struct{}
 
 var Meta = metasystem{}
 
-func (_ *metasystem) UpdateWindowSize() *system.System {
+func (_ *metasystem) UpdateWindowSize() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		width := int32(rl.GetScreenWidth())
 		height := int32(rl.GetScreenHeight())
@@ -24,13 +24,13 @@ func (_ *metasystem) UpdateWindowSize() *system.System {
 	})
 }
 
-func (_ *metasystem) UpdateDeltaTime() *system.System {
+func (_ *metasystem) UpdateDeltaTime() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		m.DeltaTime = rl.GetFrameTime()
 	})
 }
 
-func (_ *metasystem) UpdateWindowOnResize() *system.System {
+func (_ *metasystem) UpdateWindowOnResize() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if !rl.IsWindowResized() { return }
 

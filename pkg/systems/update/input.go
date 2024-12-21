@@ -11,7 +11,7 @@ type input struct{}
 
 var Input = input{}
 
-func (_ *input) HandleJourneyStart() *system.System {
+func (_ *input) HandleJourneyStart() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeTitleScreen { return }
 		if rl.IsKeyPressed(rl.KeyEnter) {

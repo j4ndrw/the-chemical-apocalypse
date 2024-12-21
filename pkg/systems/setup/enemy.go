@@ -24,7 +24,7 @@ func (_ *enemy) CreateEnemies(
 	maxSpeed components.Speed,
 	aggroRadius int32,
 	maxRoamDuration uint,
-) *system.System {
+) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		for i := 0; i < int(howMany); i++ {
 			roamDuration := float32(rand.Intn(int(maxRoamDuration) + 1))
@@ -46,13 +46,9 @@ func (_ *enemy) CreateEnemies(
 	})
 }
 
-func (_ *enemy) PlaceEnemiesInCenter() *system.System {
+func (_ *enemy) PlaceEnemyInCenter(enemy *entities.Enemy) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		for _, enemy := range w.Enemies {
-			func(enemy *entities.Enemy) {
-				enemy.Position.X = int32((rand.Intn(int(m.Window.Width))+int(m.Window.Width/3))/2 - 1)
-				enemy.Position.Y = int32((rand.Intn(int(m.Window.Height))+int(m.Window.Height/3))/2 - 1)
-			}(enemy)
-		}
+		enemy.Position.X = int32((rand.Intn(int(m.Window.Width))+int(m.Window.Width/3))/2 - 1)
+		enemy.Position.Y = int32((rand.Intn(int(m.Window.Height))+int(m.Window.Height/3))/2 - 1)
 	})
 }

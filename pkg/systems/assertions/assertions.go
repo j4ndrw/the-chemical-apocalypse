@@ -10,6 +10,6 @@ type assertion struct{}
 
 var Assertions assertion = assertion{}
 
-func (_ *assertion) Apply() *system.System {
+func (_ *assertion) Apply() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {})
 }

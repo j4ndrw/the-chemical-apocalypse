@@ -14,13 +14,13 @@ type renderer struct{}
 
 var Renderer = renderer{}
 
-func (_ *renderer) Clear() *system.System {
+func (_ *renderer) Clear() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		rl.ClearScreenBuffers()
 	})
 }
 
-func (_ *renderer) DrawTitleScreen() *system.System {
+func (_ *renderer) DrawTitleScreen() system.System {
 	draw, next := archetypes.RenderChaoticChar.Draw(
 		func(frame int32) bool {
 			return frame%utils.RandomBetween(500, 300) == 0
@@ -87,7 +87,7 @@ func (_ *renderer) DrawTitleScreen() *system.System {
 	})
 }
 
-func (_ *renderer) DrawHitboxesInExplorationMode() *system.System {
+func (_ *renderer) DrawHitboxesInExplorationMode() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeExploration {
 			return
