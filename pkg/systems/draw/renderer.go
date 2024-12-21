@@ -87,35 +87,63 @@ func (_ *renderer) DrawTitleScreen() system.System {
 	})
 }
 
-func (_ *renderer) DrawHitboxesInExplorationMode() system.System {
+func (_ *renderer) DrawHitboxesInExplorationMode(hitbox *components.Hitbox) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeExploration {
 			return
 		}
 
-		drawHitbox := func(hitbox *components.Hitbox) {
-			hitbox.Bound = &components.Bound{
-				Left:   1,
-				Top:    1,
-				Right:  m.Window.Width - hitbox.Width - 1,
-				Bottom: m.Window.Height - hitbox.Height - 1,
-			}
+		hitbox.Bound = &components.Bound{
+			Left:   1,
+			Top:    1,
+			Right:  m.Window.Width - hitbox.Width - 1,
+			Bottom: m.Window.Height - hitbox.Height - 1,
+		}
 
-			rl.DrawRectangleLinesEx(
-				rl.Rectangle{
-					X: float32(hitbox.Position.X),
-					Y: float32(hitbox.Position.Y),
-					Width: float32(hitbox.Width),
-					Height: float32(hitbox.Height),
+		rl.DrawRectangleLinesEx(
+			rl.Rectangle{
+				X:      float32(hitbox.Position.X),
+				Y:      float32(hitbox.Position.Y),
+				Width:  float32(hitbox.Width),
+				Height: float32(hitbox.Height),
 			},
-				4,
-				hitbox.Color,
-			)
+			4,
+			hitbox.Color,
+		)
+	})
+}
+
+func (_ *renderer) DrawAggroInExplorationMode(
+	hitbox *components.Hitbox,
+	aggro *components.Aggro,
+	target *components.Position,
+) system.System {
+	return system.Create(func(w *world.World, m *meta.Meta) {
+		if w.CurrentMode != world.WorldModeExploration {
+			return
 		}
 
-		drawHitbox(&w.Player.Hitbox)
-		for _, enemy := range w.Enemies {
-			drawHitbox(&enemy.Hitbox)
-		}
+		centerX := float64(hitbox.Left()+hitbox.Right()) / 2
+		centerY := float64(hitbox.Top()+hitbox.Bottom()) / 2
+		startAngle, endAngle, _ := archetypes.Vision.CenterAngleEx(
+			centerX,
+			centerY,
+			target,
+			&aggro.Vision,
+		)
+
+		rl.DrawCircleSector(
+			rl.Vector2{
+				X: float32(centerX),
+				Y: float32(centerY),
+			},
+			float32(aggro.Radius),
+			startAngle,
+			endAngle,
+			25,
+			rl.Color{
+				0x18, 0x18, 0x18, 0x30,
+			},
+		)
 	})
 }

@@ -1,6 +1,9 @@
 package archetypes
 
-import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+import (
+	"github.com/j4ndrw/the-chemical-apocalypse/internal/utils"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+)
 
 type direction struct{}
 
@@ -12,16 +15,8 @@ func (_ *direction) Update(
 	newX int32,
 	newY int32,
 ) {
-	if newX > position.X {
-		direction.X = components.DirectionRight
-	}
-	if newX < position.X {
-		direction.X = components.DirectionLeft
-	}
-	if newY > position.Y {
-		direction.Y = components.DirectionDown
-	}
-	if newY < position.Y {
-		direction.Y = components.DirectionUp
-	}
+	direction.X = (utils.BoolToNumber[int](newX > position.X) * components.DirectionRight) +
+		(utils.BoolToNumber[int](newX < position.X) * components.DirectionLeft)
+	direction.Y = (utils.BoolToNumber[int](newY > position.Y) * components.DirectionDown) +
+		(utils.BoolToNumber[int](newY < position.Y) * components.DirectionUp)
 }

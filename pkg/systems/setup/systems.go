@@ -35,7 +35,8 @@ var Systems system.SystemSlice = *system.
 		5,
 		10,
 		500,
-		10,
+		135,
+		100,
 	)).
 	Register(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {

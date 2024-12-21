@@ -23,11 +23,12 @@ func (_ *enemy) CreateEnemies(
 	minSpeed components.Speed,
 	maxSpeed components.Speed,
 	aggroRadius int32,
+	aggroVisionAngle float32,
 	maxRoamDuration uint,
 ) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		for i := 0; i < int(howMany); i++ {
-			roamDuration := float32(rand.Intn(int(maxRoamDuration) + 1))
+			roamDuration := float32(rand.Intn(int(maxRoamDuration) + 1) + 1)
 			id := archetypes.Id.Create()
 			w.Enemies[id] = &entities.Enemy{
 				Id: id,
@@ -39,8 +40,14 @@ func (_ *enemy) CreateEnemies(
 				},
 				MinSpeed: minSpeed,
 				MaxSpeed: maxSpeed,
-				Aggro:    components.Aggro{Aggro: false, Radius: aggroRadius},
-				Roam:     components.Roam{Duration: roamDuration},
+				Aggro: components.Aggro{
+					Aggro:  false,
+					Radius: aggroRadius,
+					Vision: components.Vision{
+						Angle:    aggroVisionAngle,
+					},
+				},
+				Roam: components.Roam{Duration: roamDuration},
 			}
 		}
 	})

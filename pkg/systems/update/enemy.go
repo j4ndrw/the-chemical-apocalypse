@@ -68,11 +68,9 @@ func (_ *enemy) WatchAggro(enemy *entities.Enemy) system.System {
 			return
 		}
 
-
-
 		if archetypes.Aggro.IsWithinAggroRange(
-			&w.Player.Hitbox.Position,
-			&enemy.Hitbox.Position,
+			&w.Player.Hitbox,
+			&enemy.Hitbox,
 			&enemy.Aggro,
 			) {
 			archetypes.Aggro.EnterAggro(&enemy.Aggro)
