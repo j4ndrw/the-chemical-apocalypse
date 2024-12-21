@@ -22,7 +22,7 @@ func (_ *player) CreatePlayer() system.System {
 				Height:   40,
 				Color:    rl.Color{0, 0xFF, 0, 0xFF},
 			},
-			Speed: 10,
+			Speed: 15,
 		}
 	})
 }

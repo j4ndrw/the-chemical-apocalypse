@@ -101,11 +101,14 @@ func (_ *renderer) DrawHitboxesInExplorationMode() system.System {
 				Bottom: m.Window.Height - hitbox.Height - 1,
 			}
 
-			rl.DrawRectangle(
-				hitbox.Position.X,
-				hitbox.Position.Y,
-				hitbox.Width,
-				hitbox.Height,
+			rl.DrawRectangleLinesEx(
+				rl.Rectangle{
+					X: float32(hitbox.Position.X),
+					Y: float32(hitbox.Position.Y),
+					Width: float32(hitbox.Width),
+					Height: float32(hitbox.Height),
+			},
+				4,
 				hitbox.Color,
 			)
 		}
