@@ -36,9 +36,17 @@ func (_ *mobmovement) NearestNeighborChase(
 		},
 	)
 
-	if neighbor != nil {
-		chaser.Position = *neighbor.Position
+	if neighbor == nil {
+		return
 	}
+
+	Direction.Update(
+		&chaser.Direction,
+		&chaser.Position,
+		neighbor.Position.X,
+		neighbor.Position.Y,
+	)
+	chaser.Position = *neighbor.Position
 }
 
 func (_ *mobmovement) NaiveChase(
@@ -54,8 +62,8 @@ func (_ *mobmovement) NaiveChase(
 		}
 	}
 
-	dx := target.FloatX() - chaser.FloatX()
-	dy := target.FloatY() - chaser.FloatY()
+	dx := target.FloatX() - chaser.Position.FloatX()
+	dy := target.FloatY() - chaser.Position.FloatY()
 
 	distance := math.Sqrt(dx*dx + dy*dy)
 	if distance > 0 {
@@ -63,6 +71,11 @@ func (_ *mobmovement) NaiveChase(
 		dy /= distance
 	}
 
-	chaser.Position.X += int32(dx * speed.AsFloat())
-	chaser.Position.Y += int32(dy * speed.AsFloat())
+	newX := int32(chaser.Position.FloatX() + dx*speed.AsFloat())
+	newY := int32(chaser.Position.FloatY() + dy*speed.AsFloat())
+
+	Direction.Update(&chaser.Direction, &chaser.Position, newX, newY)
+
+	chaser.Position.X = newX
+	chaser.Position.Y = newY
 }

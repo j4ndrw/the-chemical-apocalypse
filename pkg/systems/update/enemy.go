@@ -53,14 +53,14 @@ func (_ *enemy) RoamMindlessly() *system.System {
 				}
 
 				if enemy.Roam.Timer <= 0 {
-					enemy.Roam.Direction = archetypes.Position.RandomPointOnMap(&m.Window)
+					enemy.Roam.Where = archetypes.Position.RandomPointOnMap(&m.Window)
 					enemy.Roam.Timer = enemy.Roam.Duration
 					return
 				}
 
 				archetypes.MobMovement.NaiveChase(
 					&enemy.Hitbox,
-					&enemy.Roam.Direction,
+					&enemy.Roam.Where,
 					enemy.MinSpeed,
 					float64(m.DeltaTime),
 				)

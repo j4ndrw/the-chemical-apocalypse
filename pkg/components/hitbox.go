@@ -3,8 +3,9 @@ package components
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 type Hitbox struct {
-	rl.Color
-	Position
+	Color         rl.Color
+	Position      Position
+	Direction     Direction
 	Width, Height int32
 	Bound         *Bound
 }

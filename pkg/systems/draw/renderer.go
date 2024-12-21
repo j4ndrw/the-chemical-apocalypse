@@ -21,9 +21,17 @@ func (_ *renderer) Clear() *system.System {
 }
 
 func (_ *renderer) DrawTitleScreen() *system.System {
-	draw, next := archetypes.RenderChaoticChar.Draw(func(frame int32) bool {
-		return frame%utils.RandomBetween(100, 250) == 0
-	})
+	draw, next := archetypes.RenderChaoticChar.Draw(
+		func(frame int32) bool {
+			return frame%utils.RandomBetween(500, 300) == 0
+		},
+		func(frame int32) bool {
+			return frame%utils.RandomBetween(2000, 5000) == 0
+		},
+		func(frame int32) bool {
+			return frame%utils.RandomBetween(1000, 5000) == 0
+		},
+	)
 
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeTitleScreen {
@@ -45,8 +53,8 @@ func (_ *renderer) DrawTitleScreen() *system.System {
 			draw(
 				m,
 				char, idx,
-				5, 50,
-				0.05, 0.75,
+				15, 50,
+				0.01, 1.5,
 				titleFontSize, titleCharacterSpacing,
 				titleX, titleY,
 			)

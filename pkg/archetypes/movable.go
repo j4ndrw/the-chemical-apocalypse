@@ -10,29 +10,33 @@ type movable struct{}
 var Movable = movable{}
 
 func (_ *movable) MoveUp(w *meta.Window, h *components.Hitbox, s *components.Speed) {
-	if h.Y < h.Bound.Top {
+	if h.Position.Y < h.Bound.Top {
 		return
 	}
-	h.Y -= int32(*s)
+	h.Position.Y -= int32(*s)
+	h.Direction.Y = components.DirectionUp
 }
 
 func (_ *movable) MoveDown(w *meta.Window, h *components.Hitbox, s *components.Speed) {
-	if h.Y > h.Bound.Bottom {
+	if h.Position.Y > h.Bound.Bottom {
 		return
 	}
-	h.Y += int32(*s)
+	h.Position.Y += int32(*s)
+	h.Direction.Y = components.DirectionDown
 }
 
 func (_ *movable) MoveLeft(w *meta.Window, h *components.Hitbox, s *components.Speed) {
-	if h.X < h.Bound.Left {
+	if h.Position.X < h.Bound.Left {
 		return
 	}
-	h.X -= int32(*s)
+	h.Position.X -= int32(*s)
+	h.Direction.X = components.DirectionLeft
 }
 
 func (_ *movable) MoveRight(w *meta.Window, h *components.Hitbox, s *components.Speed) {
-	if h.X > h.Bound.Right {
+	if h.Position.X > h.Bound.Right {
 		return
 	}
-	h.X += int32(*s)
+	h.Position.X += int32(*s)
+	h.Direction.X = components.DirectionRight
 }

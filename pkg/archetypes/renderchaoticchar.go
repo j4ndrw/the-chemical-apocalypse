@@ -12,7 +12,11 @@ type renderchaoticchar struct{}
 
 var RenderChaoticChar = renderchaoticchar{}
 
-func (_ *renderchaoticchar) Draw(shakePredicate func(frame int32) bool) (func(
+func (_ *renderchaoticchar) Draw(
+	shakePredicate func(frame int32) bool,
+	oscillateXPredicate func(frame int32) bool,
+	oscillateYPredicate func(frame int32) bool,
+) (func(
 	m *meta.Meta,
 	char rune,
 	idx int,
@@ -29,6 +33,18 @@ func (_ *renderchaoticchar) Draw(shakePredicate func(frame int32) bool) (func(
 	shakeOffset := func(randomNumber float32, frame int32) float32 {
 		if shakePredicate(frame) {
 			return randomNumber
+		}
+		return 0
+	}
+	displaceX := func(offset float32) float32 {
+		if oscillateXPredicate(frame) {
+			return offset
+		}
+		return 0
+	}
+	displaceY := func(offset float32) float32 {
+		if oscillateYPredicate(frame) {
+			return offset
 		}
 		return 0
 	}
@@ -54,18 +70,23 @@ func (_ *renderchaoticchar) Draw(shakePredicate func(frame int32) bool) (func(
 			frame,
 		)
 
-		yOffset := amplitude * float32(
-			math.Sin(
+		xOffset := amplitude *
+			float32(math.Sin(
 				float64(frequency*float32(frame))+float64(idx),
-			),
-		)
+			))
+		yOffset := amplitude *
+			float32(
+				math.Sin(
+					float64(frequency*float32(frame))+(rand.Float64()*1.25),
+				),
+			)
 
 		rl.DrawTextCodepoint(
 			m.Font,
 			char,
 			rl.Vector2{
-				X: x + characterSpacing*float32(idx),
-				Y: y + (yOffset * 2),
+				X: x + (displaceX(float32(rand.Intn(5))) * xOffset) + characterSpacing*float32(idx),
+				Y: y + yOffset + (displaceY(2) * yOffset),
 			},
 			fontSize,
 			rl.Color{0xFF, 0xFF, 0xFF, 0xFF},
