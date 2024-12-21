@@ -2,6 +2,7 @@ package systems
 
 import (
 	"fmt"
+	"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
@@ -36,7 +37,7 @@ var Systems system.SystemSlice = *system.
 		10,
 		500,
 		135,
-		100,
+		10 * time.Second,
 	)).
 	Register(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {

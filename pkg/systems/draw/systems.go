@@ -29,4 +29,5 @@ var Systems system.SystemSlice = *system.
 			).Apply(w, m)
 		}
 	}).
-	Register(Meta.UpdateDeltaTime())
+	Register(Meta.UpdateDeltaTime()).
+	Register(Meta.UpdateFrame())

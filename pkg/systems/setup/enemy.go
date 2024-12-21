@@ -2,6 +2,7 @@ package systems
 
 import (
 	"math/rand"
+	"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
@@ -24,11 +25,10 @@ func (_ *enemy) CreateEnemies(
 	maxSpeed components.Speed,
 	aggroRadius int32,
 	aggroVisionAngle float32,
-	maxRoamDuration uint,
+	maxRoamDurationMs time.Duration,
 ) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		for i := 0; i < int(howMany); i++ {
-			roamDuration := float32(rand.Intn(int(maxRoamDuration) + 1) + 1)
 			id := archetypes.Id.Create()
 			w.Enemies[id] = &entities.Enemy{
 				Id: id,
@@ -44,10 +44,10 @@ func (_ *enemy) CreateEnemies(
 					Aggro:  false,
 					Radius: aggroRadius,
 					Vision: components.Vision{
-						Angle:    aggroVisionAngle,
+						Angle: aggroVisionAngle,
 					},
 				},
-				Roam: components.Roam{Duration: roamDuration},
+				Roam: components.Roam{MaxDuration: maxRoamDurationMs},
 			}
 		}
 	})

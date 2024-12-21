@@ -1,6 +1,8 @@
 package systems
 
 import (
+	"math"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
@@ -30,9 +32,20 @@ func (_ *metasystem) UpdateDeltaTime() system.System {
 	})
 }
 
+func (_ *metasystem) UpdateFrame() system.System {
+	return system.Create(func(w *world.World, m *meta.Meta) {
+		m.Frame++
+		if m.Frame >= math.MaxInt32 {
+			m.Frame = 0
+		}
+	})
+}
+
 func (_ *metasystem) UpdateWindowOnResize() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if !rl.IsWindowResized() { return }
+		if !rl.IsWindowResized() {
+			return
+		}
 
 		m.Window.Width = int32(rl.GetScreenWidth())
 		m.Window.Height = int32(rl.GetScreenHeight())

@@ -20,6 +20,7 @@ type Meta struct {
 	TargetFPS int32
 	DeltaTime float32
 	Font      rl.Font
+	Frame     int32
 }
 
 func New(window Window, targetFPS int32) *Meta {
@@ -31,7 +32,7 @@ func New(window Window, targetFPS int32) *Meta {
 
 func Default() *Meta {
 	return New(
-		Window{Title:  "The Chemical Apocalypse"},
+		Window{Title: "The Chemical Apocalypse"},
 		60,
 	)
 }
