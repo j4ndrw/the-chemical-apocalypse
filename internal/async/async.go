@@ -1,5 +1,7 @@
 package async
 
+import "sync"
+
 type Async struct {
 	Coroutine func(done chan bool)
 	Started   bool
@@ -7,13 +9,37 @@ type Async struct {
 }
 
 type Coroutine string
-type AsyncMap map[Coroutine]Async
+type table map[Coroutine]Async
+type AsyncMap struct {
+	table
+	sync.Mutex
+}
 
-var Routines AsyncMap = AsyncMap{}
+var Coroutines AsyncMap = AsyncMap{table: map[Coroutine]Async{}, Mutex: sync.Mutex{}}
+
+func (am *AsyncMap) GetAsync(id Coroutine) (Async, bool) {
+	am.Lock()
+	a, ok := am.table[id]
+	am.Unlock()
+	return a, ok
+}
+
+func (am *AsyncMap) SetAsync(id Coroutine, a Async) {
+	am.Lock()
+	am.table[id] = a
+	am.Unlock()
+}
+
+
+func (am *AsyncMap) RemoveAsync(id Coroutine) {
+	am.Lock()
+	delete(am.table, id)
+	am.Unlock()
+}
 
 func Create(id string, coroutine func(done chan bool)) Coroutine {
 	_id := Coroutine(id)
-	if _, ok := Routines[_id]; ok {
+	if _, ok := Coroutines.GetAsync(_id); ok {
 		return _id
 	}
 
@@ -22,34 +48,40 @@ func Create(id string, coroutine func(done chan bool)) Coroutine {
 		Started:   false,
 		Done:      make(chan bool),
 	}
-	Routines[_id] = a
+	Coroutines.SetAsync(_id, a)
 	return _id
 }
 
-func (id Coroutine) Call() {
-	if _, ok := Routines[id]; !ok {
-		return
+func (id Coroutine) Call() bool {
+	a, ok := Coroutines.GetAsync(id)
+	if !ok {
+		return false
 	}
-	if Routines[id].Started {
-		return
+	if a.Started {
+		return false
 	}
 
-	routine := Routines[id]
-	routine.Started = true
-	Routines[id] = routine
-	go Routines[id].Coroutine(Routines[id].Done)
+	a.Started = true
+	Coroutines.SetAsync(id, a)
+	go a.Coroutine(a.Done)
+	return true
 }
 
 func (id Coroutine) Remove() {
-	delete(Routines, id)
+	Coroutines.RemoveAsync(id)
 }
 
 func (id Coroutine) CallOnce() {
-	id.Call()
+	if !id.Call() {
+		return
+	}
+
 	go func() {
 		for {
+			coroutine, ok := Coroutines.GetAsync(id)
+			if !ok { return }
 			select {
-			case <-Routines[id].Done:
+			case <-coroutine.Done:
 				id.Remove()
 			}
 		}
