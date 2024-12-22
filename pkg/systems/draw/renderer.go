@@ -142,7 +142,10 @@ func (_ *renderer) DrawAggroInExplorationMode(
 			endAngle,
 			25,
 			rl.Color{
-				0x18, 0x18, 0x18, 0x30,
+				0x18,
+				0x18,
+				0x18,
+				utils.ColorOpacity(0.05),
 			},
 		)
 	})

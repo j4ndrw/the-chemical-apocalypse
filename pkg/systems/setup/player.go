@@ -18,8 +18,8 @@ func (_ *player) CreatePlayer() system.System {
 		w.Player = entities.Player{
 			Hitbox: components.Hitbox{
 				Position: components.Position{X: 0, Y: 0},
-				Width:    40,
-				Height:   40,
+				Width:    160,
+				Height:   160,
 				Color:    rl.Color{0, 0xFF, 0, 0xFF},
 			},
 			Speed: 15,

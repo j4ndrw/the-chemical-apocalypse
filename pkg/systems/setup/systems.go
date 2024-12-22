@@ -31,12 +31,12 @@ var Systems system.SystemSlice = *system.
 	Register(Player.CreatePlayer()).
 	Register(Enemy.CreateEnemies(
 		1,
-		40,
-		40,
+		160,
+		160,
 		5,
 		10,
 		500,
-		135,
+		90,
 		10 * time.Second,
 	)).
 	Register(func(w *world.World, m *meta.Meta) {
