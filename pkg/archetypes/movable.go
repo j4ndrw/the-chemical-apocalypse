@@ -9,34 +9,34 @@ type movable struct{}
 
 var Movable = movable{}
 
-func (_ *movable) MoveUp(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+func (_ *movable) MoveUp(m *meta.Meta, h *components.Hitbox, s *components.Speed) {
 	if h.Position.Y < h.Bound.Top {
 		return
 	}
-	h.Position.Y -= int32(*s)
+	h.Position.Y = int32(float32(h.Position.Y) - float32(*s)*m.DeltaTime)
 	h.Direction.Y = components.DirectionUp
 }
 
-func (_ *movable) MoveDown(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+func (_ *movable) MoveDown(m *meta.Meta, h *components.Hitbox, s *components.Speed) {
 	if h.Position.Y > h.Bound.Bottom {
 		return
 	}
-	h.Position.Y += int32(*s)
+	h.Position.Y = int32(float32(h.Position.Y) + float32(*s)*m.DeltaTime)
 	h.Direction.Y = components.DirectionDown
 }
 
-func (_ *movable) MoveLeft(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+func (_ *movable) MoveLeft(m *meta.Meta, h *components.Hitbox, s *components.Speed) {
 	if h.Position.X < h.Bound.Left {
 		return
 	}
-	h.Position.X -= int32(*s)
+	h.Position.X = int32(float32(h.Position.X) - float32(*s)*m.DeltaTime)
 	h.Direction.X = components.DirectionLeft
 }
 
-func (_ *movable) MoveRight(w *meta.Window, h *components.Hitbox, s *components.Speed) {
+func (_ *movable) MoveRight(m *meta.Meta, h *components.Hitbox, s *components.Speed) {
 	if h.Position.X > h.Bound.Right {
 		return
 	}
-	h.Position.X += int32(*s)
+	h.Position.X = int32(float32(h.Position.X) + float32(*s)*m.DeltaTime)
 	h.Direction.X = components.DirectionRight
 }

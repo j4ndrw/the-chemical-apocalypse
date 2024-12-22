@@ -5,7 +5,7 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 )
 
-type MoveFn func(w *meta.Window, h *components.Hitbox, s *components.Speed)
+type MoveFn func(m *meta.Meta, h *components.Hitbox, s *components.Speed)
 type ChaseFn func(
 	chaser *components.Hitbox,
 	target *components.Position,

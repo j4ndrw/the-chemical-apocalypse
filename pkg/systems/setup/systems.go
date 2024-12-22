@@ -33,10 +33,10 @@ var Systems system.SystemSlice = *system.
 		1,
 		160,
 		160,
-		5,
-		10,
+		200,
+		700,
 		500,
-		90,
+		135,
 		10 * time.Second,
 	)).
 	Register(func(w *world.World, m *meta.Meta) {

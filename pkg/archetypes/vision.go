@@ -1,10 +1,6 @@
 package archetypes
 
-import (
-	"math"
-
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
-)
+import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
 type vision struct{}
 
@@ -15,8 +11,7 @@ func (_ *vision) CenterAngle(
 	target *components.Position,
 	v *components.Vision,
 ) (float32, float32, float32) {
-	centerX := float64(this.Left()+this.Right()) / 2
-	centerY := float64(this.Top()+this.Bottom()) / 2
+	centerX, centerY := Geometry.Center(this)
 	return Vision.CenterAngleEx(centerX, centerY, target, v)
 }
 
@@ -26,11 +21,14 @@ func (_ *vision) CenterAngleEx(
 	target *components.Position,
 	v *components.Vision,
 ) (float32, float32, float32) {
-	dx := float64(target.X - int32(originX))
-	dy := float64(target.Y - int32(originY))
+	dx, dy := Geometry.DeltaEx(
+		target.FloatX(),
+		target.FloatY(),
+		originX,
+		originY,
+	)
 	return Vision.CenterAngleEx2(originX, originY, dx, dy, target, v)
 }
-
 
 func (_ *vision) CenterAngleEx2(
 	originX float64,
@@ -40,7 +38,7 @@ func (_ *vision) CenterAngleEx2(
 	target *components.Position,
 	v *components.Vision,
 ) (float32, float32, float32) {
-	angleToTarget := float32(math.Atan2(dy, dx) * (180 / math.Pi))
+	angleToTarget := Geometry.AngleFrom(float32(dx), float32(dy))
 
 	half := v.Angle / 2
 	start := angleToTarget - half

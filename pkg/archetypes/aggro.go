@@ -18,14 +18,23 @@ func (_ *aggro) LeaveAggro(aggro *components.Aggro) {
 	aggro.Aggro = false
 }
 
-func (_ *aggro) IsWithinAggroRange(target *components.Hitbox, chaser *components.Hitbox, aggro *components.Aggro) bool {
-	dx := target.Position.X - chaser.Position.X
-	dy := target.Position.Y - chaser.Position.Y
+func (_ *aggro) IsWithinAggroRange(
+	target *components.Hitbox,
+	chaser *components.Hitbox,
+	aggro *components.Aggro,
+) bool {
+	centerTargetX, centerTargetY := Geometry.Center(target)
+	centerChaserX, centerChaserY := Geometry.Center(chaser)
+	dx, dy := Geometry.DeltaEx(
+		centerTargetX,
+		centerTargetY,
+		centerChaserX,
+		centerChaserY,
+	)
 
-	sqDistance := dx*dx + dy*dy
 	sqAggroRadius := aggro.Radius * aggro.Radius
 
-	if sqDistance > sqAggroRadius {
+	if int32(Geometry.SquaredDistance(dx, dy)) > sqAggroRadius {
 		return false
 	}
 
@@ -38,15 +47,15 @@ func (_ *aggro) IsWithinAggroRange(target *components.Hitbox, chaser *components
 		&aggro.Vision,
 	)
 
-	chaserDirectionAngle := float32(math.Atan2(
-		float64(chaser.Direction.Y),
-		float64(chaser.Direction.X),
-	) * (180 / math.Pi))
+	chaserDirectionAngle := Geometry.AngleFrom(
+		float32(chaser.Direction.X),
+		float32(chaser.Direction.Y),
+	)
 
-	angleDifference := angleToTarget - chaserDirectionAngle
-	angleDifference -= utils.BoolToNumber[float32](angleDifference > 180) * 360
-	angleDifference += utils.BoolToNumber[float32](angleDifference < -180) * 360
+	diff := angleToTarget - chaserDirectionAngle
+	diff -= utils.BoolToNumber[float32](diff > 180) * 360
+	diff += utils.BoolToNumber[float32](diff < -180) * 360
 
-	isWithinFOV := math.Abs(float64(angleDifference)) <= float64(aggro.Vision.Angle/2)
+	isWithinFOV := math.Abs(float64(diff)) <= float64(aggro.Vision.Angle/2)
 	return isWithinFOV
 }

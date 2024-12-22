@@ -35,7 +35,7 @@ func (_ *metasystem) UpdateDeltaTime() system.System {
 func (_ *metasystem) UpdateFrame() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		m.Frame++
-		if m.Frame >= math.MaxInt32 {
+		if m.Frame < 0 || m.Frame >= math.MaxInt32 {
 			m.Frame = 0
 		}
 	})

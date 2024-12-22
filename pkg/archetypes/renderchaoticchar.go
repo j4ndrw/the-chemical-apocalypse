@@ -13,11 +13,11 @@ type renderchaoticchar struct{}
 var RenderChaoticChar = renderchaoticchar{}
 
 func (_ *renderchaoticchar) Draw(
+	m *meta.Meta,
 	shakePredicate func(frame int32) bool,
 	oscillateXPredicate func(frame int32) bool,
 	oscillateYPredicate func(frame int32) bool,
 ) (func(
-	m *meta.Meta,
 	char rune,
 	idx int,
 	baseAmplitude float32,
@@ -28,58 +28,54 @@ func (_ *renderchaoticchar) Draw(
 	characterSpacing float32,
 	x float32,
 	y float32,
-), func()) {
-	frame := int32(0)
+)) {
 	shakeOffset := func(randomNumber float32, frame int32) float32 {
-		if shakePredicate(frame) {
+		if shakePredicate(m.Frame) {
 			return randomNumber
 		}
 		return 0
 	}
 	displaceX := func(offset float32) float32 {
-		if oscillateXPredicate(frame) {
+		if oscillateXPredicate(m.Frame) {
 			return offset
 		}
 		return 0
 	}
 	displaceY := func(offset float32) float32 {
-		if oscillateYPredicate(frame) {
+		if oscillateYPredicate(m.Frame) {
 			return offset
 		}
 		return 0
 	}
 
 	draw := func(
-		m *meta.Meta,
 		char rune, idx int,
 		baseAmplitude, maxAmplitude float32,
 		baseFrequency, maxFrequency float32,
 		fontSize, characterSpacing float32,
 		x, y float32,
 	) {
-		if frame > math.MaxInt32 {
-			frame = 0 // trying to avoid int overflows
-		}
-
 		amplitude := baseAmplitude + shakeOffset(
 			float32(rand.Intn(int(maxAmplitude))),
-			frame,
+			m.Frame,
 		)
 		frequency := baseFrequency + shakeOffset(
 			float32(rand.Float64()*float64(maxFrequency)),
-			frame,
+			m.Frame,
 		)
 
-		xOffset := amplitude *
-			float32(math.Sin(
-				float64(frequency*float32(frame))+float64(idx),
-			))
-		yOffset := amplitude *
-			float32(
-				math.Sin(
-					float64(frequency*float32(frame))+(rand.Float64()*1.25),
-				),
-			)
+		xOffset := Physics.Oscillation(
+			amplitude,
+			math.Sin(
+				float64(frequency*float32(m.Frame))+float64(idx),
+			),
+		)
+		yOffset := Physics.Oscillation(
+			amplitude,
+			math.Sin(
+				float64(frequency*float32(m.Frame))+(rand.Float64()*1.25),
+			),
+		)
 
 		rl.DrawTextCodepoint(
 			m.Font,
@@ -93,9 +89,5 @@ func (_ *renderchaoticchar) Draw(
 		)
 	}
 
-	next := func() {
-		frame++
-	}
-
-	return draw, next
+	return draw
 }

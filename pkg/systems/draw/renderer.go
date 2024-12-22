@@ -21,22 +21,23 @@ func (_ *renderer) Clear() system.System {
 }
 
 func (_ *renderer) DrawTitleScreen() system.System {
-	draw, next := archetypes.RenderChaoticChar.Draw(
-		func(frame int32) bool {
-			return frame%utils.RandomBetween(500, 300) == 0
-		},
-		func(frame int32) bool {
-			return frame%utils.RandomBetween(2000, 5000) == 0
-		},
-		func(frame int32) bool {
-			return frame%utils.RandomBetween(1000, 5000) == 0
-		},
-	)
-
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		if w.CurrentMode != world.WorldModeTitleScreen {
 			return
 		}
+
+		draw := archetypes.RenderChaoticChar.Draw(
+			m,
+			func(frame int32) bool {
+				return frame%utils.RandomBetween(500, 300) == 0
+			},
+			func(frame int32) bool {
+				return frame%utils.RandomBetween(2000, 5000) == 0
+			},
+			func(frame int32) bool {
+				return frame%utils.RandomBetween(1000, 5000) == 0
+			},
+		)
 
 		titleFontSize := float32(m.Window.Width / 25)
 		titleCharacterSpacing := float32(titleFontSize / 2.25)
@@ -51,7 +52,6 @@ func (_ *renderer) DrawTitleScreen() system.System {
 
 		for idx, char := range m.Window.Title {
 			draw(
-				m,
 				char, idx,
 				15, 50,
 				0.01, 1.5,
@@ -74,7 +74,6 @@ func (_ *renderer) DrawTitleScreen() system.System {
 
 		for idx, char := range startYourJourneyText {
 			draw(
-				m,
 				char, idx,
 				1, 10,
 				0.05, 0.5,
@@ -82,8 +81,6 @@ func (_ *renderer) DrawTitleScreen() system.System {
 				startYourJourneyX, startYourJourneyY+150,
 			)
 		}
-
-		next()
 	})
 }
 
@@ -123,8 +120,7 @@ func (_ *renderer) DrawAggroInExplorationMode(
 			return
 		}
 
-		centerX := float64(hitbox.Left()+hitbox.Right()) / 2
-		centerY := float64(hitbox.Top()+hitbox.Bottom()) / 2
+		centerX, centerY := archetypes.Geometry.Center(hitbox)
 		startAngle, endAngle, _ := archetypes.Vision.CenterAngleEx(
 			centerX,
 			centerY,
@@ -145,7 +141,7 @@ func (_ *renderer) DrawAggroInExplorationMode(
 				0x18,
 				0x18,
 				0x18,
-				utils.ColorOpacity(0.05),
+				utils.ColorOpacity(0.2),
 			},
 		)
 	})

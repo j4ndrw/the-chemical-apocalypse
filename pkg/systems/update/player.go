@@ -17,7 +17,9 @@ var Player = player{}
 
 func (_ *player) HandleMovement() system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
-		if w.CurrentMode != world.WorldModeExploration { return }
+		if w.CurrentMode != world.WorldModeExploration {
+			return
+		}
 
 		handle := func(
 			moveFunction archetypes.MoveFn,
@@ -26,7 +28,7 @@ func (_ *player) HandleMovement() system.System {
 		) {
 			for _, key := range keys {
 				if rl.IsKeyDown(key) {
-					moveFunction(&m.Window, &w.Player.Hitbox, &w.Player.Speed)
+					moveFunction(m, &w.Player.Hitbox, &w.Player.Speed)
 					if archetypes.Collidable.IsColliding(
 						&w.Player.Hitbox,
 						utils.SliceMap(
@@ -36,7 +38,7 @@ func (_ *player) HandleMovement() system.System {
 							},
 						)...,
 					) {
-						undoFunction(&m.Window, &w.Player.Hitbox, &w.Player.Speed)
+						undoFunction(m, &w.Player.Hitbox, &w.Player.Speed)
 					}
 					return
 				}

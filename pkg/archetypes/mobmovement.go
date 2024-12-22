@@ -1,10 +1,6 @@
 package archetypes
 
-import (
-	"math"
-
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
-)
+import "github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 
 type mobmovement struct{}
 
@@ -62,19 +58,23 @@ func (_ *mobmovement) NaiveChase(
 		}
 	}
 
-	dx := target.FloatX() - chaser.Position.FloatX()
-	dy := target.FloatY() - chaser.Position.FloatY()
+	dx, dy := Geometry.Delta(target, &chaser.Position)
+	distance := Geometry.Distance(dx, dy)
 
-	distance := math.Sqrt(dx*dx + dy*dy)
 	if distance > 0 {
 		dx /= distance
 		dy /= distance
 	}
 
-	newX := int32(chaser.Position.FloatX() + dx*speed.AsFloat())
-	newY := int32(chaser.Position.FloatY() + dy*speed.AsFloat())
+	newX := int32(chaser.Position.FloatX() + dx*(speed.AsFloat() * deltaTime))
+	newY := int32(chaser.Position.FloatY() + dy*(speed.AsFloat() * deltaTime))
 
-	Direction.Update(&chaser.Direction, &chaser.Position, newX, newY)
+	Direction.Update(
+		&chaser.Direction,
+		&chaser.Position,
+		newX,
+		newY,
+	)
 
 	chaser.Position.X = newX
 	chaser.Position.Y = newY
