@@ -8,5 +8,4 @@ type Roam struct {
 	Duration    time.Duration
 	Ticker      *time.Ticker
 	ElapsedTime time.Duration
-	Started     bool
 }

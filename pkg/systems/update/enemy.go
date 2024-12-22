@@ -8,6 +8,7 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/coroutines"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
 
@@ -45,9 +46,9 @@ func (_ *enemy) RoamMindlessly(enemy *entities.Enemy) system.System {
 		}
 
 		if enemy.Aggro.Aggro {
+			coroutines.Enemy.Roam(enemy).Remove()
 			enemy.Roam.Duration = 0
 			enemy.Roam.ElapsedTime = 0
-			enemy.Roam.Started = false
 			if enemy.Roam.Ticker != nil {
 				enemy.Roam.Ticker.Stop()
 				enemy.Roam.Ticker = nil
@@ -56,35 +57,15 @@ func (_ *enemy) RoamMindlessly(enemy *entities.Enemy) system.System {
 		}
 
 		if enemy.Roam.Ticker == nil {
+			coroutines.Enemy.Roam(enemy).Remove()
 			enemy.Roam.ElapsedTime = 0
-			enemy.Roam.Started = false
 			enemy.Roam.Duration = time.Duration(rand.Intn(int(enemy.Roam.MaxDuration)) + 1)
 			enemy.Roam.Where = archetypes.Position.RandomPointOnMap(&m.Window)
 			enemy.Roam.Ticker = time.NewTicker(time.Second)
 			return
 		}
 
-		go func() {
-			if enemy.Roam.Ticker == nil {
-				return
-			}
-			if enemy.Roam.Started {
-				return
-			}
-
-			enemy.Roam.Started = true
-			for {
-				select {
-				case <-enemy.Roam.Ticker.C:
-					enemy.Roam.ElapsedTime += time.Second
-					if enemy.Roam.ElapsedTime >= enemy.Roam.Duration {
-						enemy.Roam.Ticker.Stop()
-						enemy.Roam.Ticker = nil
-						return
-					}
-				}
-			}
-		}()
+		coroutines.Enemy.Roam(enemy).CallOnce()
 
 		archetypes.MobMovement.NaiveChase(
 			&enemy.Hitbox,
