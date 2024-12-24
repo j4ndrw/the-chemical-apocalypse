@@ -8,6 +8,7 @@ type Hitbox struct {
 	Direction     Direction
 	Width, Height int32
 	Bound         *Bound
+	Hidden        bool
 }
 
 func (h *Hitbox) Left() int32 {

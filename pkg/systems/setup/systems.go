@@ -31,16 +31,24 @@ var Systems system.SystemSlice = *system.
 	Register(Player.CreatePlayer()).
 	Register(Enemy.CreateEnemies(
 		1,
-		160,
-		160,
+		256,
+		256,
 		200,
 		700,
 		500,
 		135,
-		10 * time.Second,
+		10*time.Second,
 	)).
 	Register(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {
 			Enemy.PlaceEnemyInCenter(enemy).Apply(w, m)
 		}
-	})
+	}).
+	Register(
+		Meta.LoadPlayerSpriteAtlas(
+			fmt.Sprintf(
+				"%s/assets/sprites/dr-peanut-idle-atlas.png",
+				utils.GetCwd(),
+			),
+		),
+	)

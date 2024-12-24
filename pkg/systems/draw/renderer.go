@@ -97,16 +97,40 @@ func (_ *renderer) DrawHitboxesInExplorationMode(hitbox *components.Hitbox) syst
 			Bottom: m.Window.Height - hitbox.Height - 1,
 		}
 
-		rl.DrawRectangleLinesEx(
-			rl.Rectangle{
-				X:      float32(hitbox.Position.X),
-				Y:      float32(hitbox.Position.Y),
-				Width:  float32(hitbox.Width),
-				Height: float32(hitbox.Height),
-			},
-			4,
-			hitbox.Color,
+		if !hitbox.Hidden {
+			rl.DrawRectangleLinesEx(
+				rl.Rectangle{
+					X:      float32(hitbox.Position.X),
+					Y:      float32(hitbox.Position.Y),
+					Width:  float32(hitbox.Width),
+					Height: float32(hitbox.Height),
+				},
+				4,
+				hitbox.Color,
+			)
+		}
+	})
+}
+
+func (_ *renderer) DrawPlayerSprite() system.System {
+	return system.Create(func(w *world.World, m *meta.Meta) {
+		if w.CurrentMode != world.WorldModeExploration {
+			return
+		}
+		variant := func() int32 {
+			if m.Frame%(7*7) == 0 {
+				return 0
+			}
+			return (m.Frame / 7) * w.Player.Hitbox.Width
+		}()
+		archetypes.Sprite.DrawSpriteFromAtlas(
+			m.SpriteAtlas[string(w.Player.Id)],
+			variant,
+			0,
+			&w.Player.Hitbox,
+			&w.Player.Direction,
 		)
+
 	})
 }
 
