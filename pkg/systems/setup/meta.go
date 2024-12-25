@@ -50,6 +50,6 @@ func (_ *metasystem) LoadFont(path string) system.System {
 func (_ *metasystem) LoadPlayerSpriteAtlas(path string) system.System {
 	return system.Create(func(w *world.World, m *meta.Meta) {
 		texture := rl.LoadTexture(path)
-		m.SpriteAtlas[string(w.Player.Id)] = &texture
+		m.SpriteAtlas = &texture
 	})
 }

@@ -51,4 +51,5 @@ var Systems system.SystemSlice = *system.
 				utils.GetCwd(),
 			),
 		),
-	)
+	).
+	Register(Sprite.SetupPlayerSprites())

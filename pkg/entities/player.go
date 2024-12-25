@@ -6,4 +6,6 @@ type Player struct {
 	components.Id
 	components.Hitbox
 	components.Speed
+	components.Moving
+	SpriteMap components.SpriteMap
 }

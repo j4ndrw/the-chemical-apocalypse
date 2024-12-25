@@ -13,9 +13,9 @@ var Systems system.SystemSlice = *system.
 	Register(Meta.UpdateWindowOnResize()).
 	Register(Renderer.Clear()).
 	Register(Renderer.DrawTitleScreen()).
+	Register(Sprite.DrawPlayerIdleSprite()).
 	Register(func(w *world.World, m *meta.Meta) {
 		Renderer.DrawHitboxesInExplorationMode(&w.Player.Hitbox).Apply(w, m)
-		Renderer.DrawPlayerSprite().Apply(w, m)
 		for _, enemy := range w.Enemies {
 			Renderer.DrawHitboxesInExplorationMode(&enemy.Hitbox).Apply(w, m)
 			Renderer.DrawAggroInExplorationMode(

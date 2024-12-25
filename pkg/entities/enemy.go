@@ -9,4 +9,5 @@ type Enemy struct {
 	MaxSpeed components.Speed
 	components.Aggro
 	components.Roam
+	components.Moving
 }

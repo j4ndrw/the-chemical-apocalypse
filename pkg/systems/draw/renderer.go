@@ -112,28 +112,6 @@ func (_ *renderer) DrawHitboxesInExplorationMode(hitbox *components.Hitbox) syst
 	})
 }
 
-func (_ *renderer) DrawPlayerSprite() system.System {
-	return system.Create(func(w *world.World, m *meta.Meta) {
-		if w.CurrentMode != world.WorldModeExploration {
-			return
-		}
-		variant := func() int32 {
-			if m.Frame%(7*7) == 0 {
-				return 0
-			}
-			return (m.Frame / 7) * w.Player.Hitbox.Width
-		}()
-		archetypes.Sprite.DrawSpriteFromAtlas(
-			m.SpriteAtlas[string(w.Player.Id)],
-			variant,
-			0,
-			&w.Player.Hitbox,
-			&w.Player.Direction,
-		)
-
-	})
-}
-
 func (_ *renderer) DrawAggroInExplorationMode(
 	hitbox *components.Hitbox,
 	aggro *components.Aggro,
