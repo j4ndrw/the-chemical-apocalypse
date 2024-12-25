@@ -22,6 +22,9 @@ func (_ *sprite) UpdatePlayerSprite() system.System {
 			if w.Player.Direction.Y == components.DirectionDown {
 				return constants.Keys.PlayerMoveDown
 			}
+			if w.Player.Direction.Y == components.DirectionUp {
+				return constants.Keys.PlayerMoveUp
+			}
 			// DEBUG
 			return constants.Keys.PlayerIdle
 		}())

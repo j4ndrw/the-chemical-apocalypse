@@ -54,6 +54,9 @@ func (_ *sprite) GetSpriteRow(key string) float32 {
 	if key == constants.Keys.PlayerMoveDown {
 		return 1
 	}
+	if key == constants.Keys.PlayerMoveUp {
+		return 2
+	}
 	return -1
 }
 
