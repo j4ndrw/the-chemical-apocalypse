@@ -10,7 +10,7 @@ var Systems system.SystemSlice = *system.
 	Slice().
 	Register(Input.HandleJourneyStart()).
 	Register(Player.HandleMovement()).
-	Register(Player.UpdateIdleSprite(0)).
+	Register(Sprite.UpdatePlayerSprite()).
 	Register(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {
 			Enemy.WatchAggro(enemy).Apply(w, m)

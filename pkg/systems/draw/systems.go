@@ -13,7 +13,7 @@ var Systems system.SystemSlice = *system.
 	Register(Meta.UpdateWindowOnResize()).
 	Register(Renderer.Clear()).
 	Register(Renderer.DrawTitleScreen()).
-	Register(Sprite.DrawPlayerIdleSprite()).
+	Register(Sprite.DrawPlayerSprite()).
 	Register(func(w *world.World, m *meta.Meta) {
 		Renderer.DrawHitboxesInExplorationMode(&w.Player.Hitbox).Apply(w, m)
 		for _, enemy := range w.Enemies {

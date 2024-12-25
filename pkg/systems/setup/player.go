@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/constants"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
@@ -26,6 +27,7 @@ func (_ *player) CreatePlayer() system.System {
 				Color:    rl.Color{0, 0xFF, 0, 0xFF},
 				Hidden:   true,
 			},
+			SpriteKey: components.SpriteKey(constants.Keys.PlayerIdle),
 			Speed: 750,
 		}
 	})

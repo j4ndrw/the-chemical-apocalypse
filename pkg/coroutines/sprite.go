@@ -31,13 +31,15 @@ func (_ *sprite) Tick(
 			for {
 				select {
 				case <-ticker.C:
-					sprite := (*spriteMap)[key]
+					spriteMap.Lock()
+					sprite := spriteMap.Map[key]
 					offset := float32(math.Abs(float64(sprite.Src.Width)))
 					sprite.Src.X += offset
 					if int(sprite.Src.X) >= int(maxVariants*int32(offset)) {
 						sprite.Src.X = 0
 					}
-					(*spriteMap)[key] = sprite
+					spriteMap.Map[key] = sprite
+					spriteMap.Unlock()
 				}
 			}
 		},

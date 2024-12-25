@@ -47,7 +47,7 @@ var Systems system.SystemSlice = *system.
 	Register(
 		Meta.LoadPlayerSpriteAtlas(
 			fmt.Sprintf(
-				"%s/assets/sprites/dr-peanut-idle-atlas.png",
+				"%s/assets/sprites/the-chemical-apocalypse-atlas.png",
 				utils.GetCwd(),
 			),
 		),

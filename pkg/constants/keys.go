@@ -1,8 +1,13 @@
 package constants
 
 type keys struct {
-	Idle string
-	Roam string
+	PlayerIdle     string
+	PlayerMoveDown string
+	Roam           string
 }
 
-var Keys = keys{Idle: "idle", Roam: "roam"}
+var Keys = keys{
+	PlayerIdle: "playeridle",
+	PlayerMoveDown: "playermovedown",
+	Roam: "roam",
+}

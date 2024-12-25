@@ -8,4 +8,5 @@ type Player struct {
 	components.Speed
 	components.Moving
 	SpriteMap components.SpriteMap
+	SpriteKey components.SpriteKey
 }

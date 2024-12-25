@@ -1,6 +1,8 @@
 package components
 
 import (
+	"sync"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -14,4 +16,9 @@ type Sprite struct {
 	Ticker
 }
 
-type SpriteMap map[string]*Sprite
+type SpriteMap struct {
+	Map map[string]*Sprite
+	sync.Mutex
+}
+
+type SpriteKey string
