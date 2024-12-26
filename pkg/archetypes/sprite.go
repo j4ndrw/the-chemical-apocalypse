@@ -60,7 +60,7 @@ func (_ *sprite) GetSpriteRow(key string) float32 {
 	return -1
 }
 
-func (_ *sprite) UpdateTimeline(
+func (_ *sprite) AnimateSprite(
 	m *meta.Meta,
 	id *components.Id,
 	key *components.SpriteKey,
@@ -91,7 +91,7 @@ func (_ *sprite) UpdateTimeline(
 	sprite.Src.Height = float32(hitbox.Height)
 	sprite.Src.Height /= sprite.Scale
 
-	coroutines.Sprite.Tick(
+	coroutines.Sprite.Animate(
 		id,
 		string(*key),
 		spriteMap,

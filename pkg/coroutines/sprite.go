@@ -13,7 +13,7 @@ type sprite struct{}
 
 var Sprite = sprite{}
 
-func (_ *sprite) Tick(
+func (_ *sprite) Animate(
 	id *components.Id,
 	key string,
 	spriteMap *components.SpriteMap,

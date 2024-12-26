@@ -28,7 +28,7 @@ func (_ *sprite) UpdatePlayerSprite() system.System {
 			// DEBUG
 			return constants.Keys.PlayerIdle
 		}())
-		archetypes.Sprite.UpdateTimeline(
+		archetypes.Sprite.AnimateSprite(
 			m,
 			&w.Player.Id,
 			&w.Player.SpriteKey,
