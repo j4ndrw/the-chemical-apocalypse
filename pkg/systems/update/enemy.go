@@ -3,6 +3,7 @@ package systems
 import (
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/coroutines"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
@@ -23,6 +24,7 @@ func (_ *enemy) ChasePlayer(enemy *entities.Enemy) system.System {
 			return
 		}
 
+		enemy.Moving = true
 		archetypes.MobMovement.NaiveChase(
 			&enemy.Hitbox,
 			&w.Player.Hitbox.Position,
@@ -55,12 +57,21 @@ func (_ *enemy) RoamMindlessly(enemy *entities.Enemy) system.System {
 		}
 
 		coroutines.Roam.Tick(&enemy.Id, &enemy.Roam).CallOnce()
+
+		oldX := enemy.Hitbox.Position.X
+		oldY := enemy.Hitbox.Position.Y
+
 		archetypes.MobMovement.NaiveChase(
 			&enemy.Hitbox,
 			&enemy.Roam.Where,
 			enemy.MinSpeed,
 			float64(m.DeltaTime),
 		)
+		enemy.Moving = oldX != enemy.Position.X || oldY != enemy.Position.Y
+		if !enemy.Moving {
+			enemy.Direction.X = components.DirectionNone
+			enemy.Direction.Y = components.DirectionNone
+		}
 	})
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/constants"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
 )
@@ -32,6 +33,29 @@ func (_ *sprite) UpdatePlayerSprite() system.System {
 			&w.Player.Hitbox,
 			&w.Player.Direction,
 			&w.Player.SpriteMap,
+		)
+	}
+}
+
+func (_ *sprite) UpdateEnemySprite(enemy *entities.Enemy) system.System {
+	return func(w *world.World, m *meta.Meta) {
+		enemy.SpriteKey = components.SpriteKey(constants.Keys.AntiPeanutIdle)
+		if enemy.Direction.X == components.DirectionLeft || enemy.Direction.X == components.DirectionRight {
+			enemy.SpriteKey = components.SpriteKey(constants.Keys.AntiPeanutMoveForward)
+		}
+		if enemy.Direction.Y == components.DirectionDown {
+			enemy.SpriteKey = components.SpriteKey(constants.Keys.AntiPeanutMoveDown)
+		}
+		if enemy.Direction.Y == components.DirectionUp {
+			enemy.SpriteKey = components.SpriteKey(constants.Keys.AntiPeanutMoveUp)
+		}
+		archetypes.Sprite.Animate(
+			m,
+			&enemy.Id,
+			&enemy.SpriteKey,
+			&enemy.Hitbox,
+			&enemy.Direction,
+			&enemy.SpriteMap,
 		)
 	}
 }

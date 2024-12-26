@@ -8,6 +8,7 @@ import (
 	"github.com/j4ndrw/the-chemical-apocalypse/internal/system"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/archetypes"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/constants"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/meta"
 	"github.com/j4ndrw/the-chemical-apocalypse/pkg/world"
@@ -37,6 +38,8 @@ func (_ *enemy) CreateEnemies(
 					Width:    width,
 					Height:   height,
 					Color:    rl.Color{0xFF, 0, 0, 0xFF},
+					Hidden:   true,
+					PaddingPercentage:  0.5,
 				},
 				MinSpeed: minSpeed,
 				MaxSpeed: maxSpeed,
@@ -47,7 +50,8 @@ func (_ *enemy) CreateEnemies(
 						Angle: aggroVisionAngle,
 					},
 				},
-				Roam: components.Roam{MaxDuration: maxRoamDurationMs},
+				Roam:      components.Roam{MaxDuration: maxRoamDurationMs},
+				SpriteKey: components.SpriteKey(constants.Keys.AntiPeanutIdle),
 			}
 		}
 	})

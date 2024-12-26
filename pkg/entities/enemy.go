@@ -10,4 +10,6 @@ type Enemy struct {
 	components.Aggro
 	components.Roam
 	components.Moving
+	SpriteMap components.SpriteMap
+	SpriteKey components.SpriteKey
 }

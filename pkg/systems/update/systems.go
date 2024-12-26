@@ -13,6 +13,7 @@ var Systems system.SystemSlice = *system.
 	Register(Sprite.UpdatePlayerSprite()).
 	Register(func(w *world.World, m *meta.Meta) {
 		for _, enemy := range w.Enemies {
+			Sprite.UpdateEnemySprite(enemy).Apply(w, m)
 			Enemy.WatchAggro(enemy).Apply(w, m)
 			Enemy.RoamMindlessly(enemy).Apply(w, m)
 			Enemy.ChasePlayer(enemy).Apply(w, m)

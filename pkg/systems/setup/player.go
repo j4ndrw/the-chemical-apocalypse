@@ -26,9 +26,10 @@ func (_ *player) CreatePlayer() system.System {
 				Height:   256,
 				Color:    rl.Color{0, 0xFF, 0, 0xFF},
 				Hidden:   true,
+				PaddingPercentage:  0.5,
 			},
 			SpriteKey: components.SpriteKey(constants.Keys.PlayerIdle),
-			Speed: 750,
+			Speed:     750,
 		}
 	})
 }

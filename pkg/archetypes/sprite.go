@@ -1,6 +1,7 @@
 package archetypes
 
 import (
+	"log/slog"
 	"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -60,6 +61,18 @@ func (_ *sprite) GetSpriteRow(key string) float32 {
 	if key == constants.Keys.PlayerMoveForward {
 		return 3
 	}
+	if key == constants.Keys.AntiPeanutIdle {
+		return 4
+	}
+	if key == constants.Keys.AntiPeanutMoveDown {
+		return 5
+	}
+	if key == constants.Keys.AntiPeanutMoveUp {
+		return 6
+	}
+	if key == constants.Keys.AntiPeanutMoveForward {
+		return 7
+	}
 	return -1
 }
 
@@ -77,6 +90,7 @@ func (_ *sprite) Animate(
 	sheetRow := Sprite.GetSpriteRow(string(*key))
 
 	variants := int32(float32(m.SpriteAtlas.Width) / (float32(hitbox.Width) / sprite.Scale))
+	slog.Info("Animate", "sheetRow", sheetRow)
 
 	if sprite.Ticker.Ticker == nil {
 		sprite.Ticker.Ticker = time.NewTicker(75 * time.Millisecond)
