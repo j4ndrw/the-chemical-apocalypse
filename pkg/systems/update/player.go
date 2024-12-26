@@ -54,5 +54,9 @@ func (_ *player) HandleMovement() system.System {
 		handle(archetypes.Movable.MoveRight, archetypes.Movable.MoveLeft, rl.KeyD, rl.KeyRight)
 
 		w.Player.Moving = oldX != w.Player.Position.X || oldY != w.Player.Position.Y
+		if !w.Player.Moving {
+			w.Player.Direction.X = components.DirectionNone
+			w.Player.Direction.Y = components.DirectionNone
+		}
 	})
 }

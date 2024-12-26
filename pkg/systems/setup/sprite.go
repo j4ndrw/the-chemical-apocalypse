@@ -24,9 +24,10 @@ func (_ *sprite) SetupPlayerSprites() system.System {
 		}
 		w.Player.SpriteMap = components.SpriteMap{
 			Map: map[string]*components.Sprite{
-				constants.Keys.PlayerIdle:     makeDefault(),
-				constants.Keys.PlayerMoveDown: makeDefault(),
-				constants.Keys.PlayerMoveUp: makeDefault(),
+				constants.Keys.PlayerIdle:        makeDefault(),
+				constants.Keys.PlayerMoveDown:    makeDefault(),
+				constants.Keys.PlayerMoveUp:      makeDefault(),
+				constants.Keys.PlayerMoveForward: makeDefault(),
 			},
 		}
 	}

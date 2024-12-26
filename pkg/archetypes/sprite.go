@@ -57,10 +57,13 @@ func (_ *sprite) GetSpriteRow(key string) float32 {
 	if key == constants.Keys.PlayerMoveUp {
 		return 2
 	}
+	if key == constants.Keys.PlayerMoveForward {
+		return 3
+	}
 	return -1
 }
 
-func (_ *sprite) AnimateSprite(
+func (_ *sprite) Animate(
 	m *meta.Meta,
 	id *components.Id,
 	key *components.SpriteKey,
@@ -76,7 +79,7 @@ func (_ *sprite) AnimateSprite(
 	variants := int32(float32(m.SpriteAtlas.Width) / (float32(hitbox.Width) / sprite.Scale))
 
 	if sprite.Ticker.Ticker == nil {
-		sprite.Ticker.Ticker = time.NewTicker(100 * time.Millisecond)
+		sprite.Ticker.Ticker = time.NewTicker(75 * time.Millisecond)
 	}
 
 	sprite.Src.Y = float32(sheetRow) * (float32(hitbox.Height) / sprite.Scale)

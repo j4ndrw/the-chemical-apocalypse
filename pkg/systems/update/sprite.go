@@ -15,20 +15,17 @@ var Sprite = sprite{}
 
 func (_ *sprite) UpdatePlayerSprite() system.System {
 	return func(w *world.World, m *meta.Meta) {
-		w.Player.SpriteKey = components.SpriteKey(func() string {
-			if !w.Player.Moving {
-				return constants.Keys.PlayerIdle
-			}
-			if w.Player.Direction.Y == components.DirectionDown {
-				return constants.Keys.PlayerMoveDown
-			}
-			if w.Player.Direction.Y == components.DirectionUp {
-				return constants.Keys.PlayerMoveUp
-			}
-			// DEBUG
-			return constants.Keys.PlayerIdle
-		}())
-		archetypes.Sprite.AnimateSprite(
+		w.Player.SpriteKey = components.SpriteKey(constants.Keys.PlayerIdle)
+		if w.Player.Direction.X == components.DirectionLeft || w.Player.Direction.X == components.DirectionRight {
+			w.Player.SpriteKey = components.SpriteKey(constants.Keys.PlayerMoveForward)
+		}
+		if w.Player.Direction.Y == components.DirectionDown {
+			w.Player.SpriteKey = components.SpriteKey(constants.Keys.PlayerMoveDown)
+		}
+		if w.Player.Direction.Y == components.DirectionUp {
+			w.Player.SpriteKey = components.SpriteKey(constants.Keys.PlayerMoveUp)
+		}
+		archetypes.Sprite.Animate(
 			m,
 			&w.Player.Id,
 			&w.Player.SpriteKey,
