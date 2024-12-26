@@ -1,7 +1,6 @@
 package archetypes
 
 import (
-	"log/slog"
 	"time"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -90,7 +89,6 @@ func (_ *sprite) Animate(
 	sheetRow := Sprite.GetSpriteRow(string(*key))
 
 	variants := int32(float32(m.SpriteAtlas.Width) / (float32(hitbox.Width) / sprite.Scale))
-	slog.Info("Animate", "sheetRow", sheetRow)
 
 	if sprite.Ticker.Ticker == nil {
 		sprite.Ticker.Ticker = time.NewTicker(75 * time.Millisecond)

@@ -1,8 +1,10 @@
 # The Chemical Apocalypse
 
+[demo.webm](https://github.com/user-attachments/assets/23ab47a5-47be-4e34-b281-cc7f38651a3b)
+
 ## Overview
 
-**The Chemical Apocalypse** is my first attempt at developing a game using Raylib as the foundation. This project is a personal endeavor, and I’m sharing it to document my progress and invite collaboration.
+**The Chemical Apocalypse** is my first attempt at developing a game using Raylib as the foundation. This project is a personal endeavor, and I’m sharing it to document my progress.
 
 ## Current State
 
