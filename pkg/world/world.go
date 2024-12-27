@@ -1,8 +1,9 @@
 package world
 
 import (
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/components"
-	"github.com/j4ndrw/the-chemical-apocalypse/pkg/entities"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/enemy"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/id"
+	"github.com/j4ndrw/the-chemical-apocalypse/pkg/player"
 )
 
 type WorldMode int32
@@ -23,15 +24,15 @@ const (
 )
 
 type World struct {
-	Player      entities.Player
-	Enemies     map[components.Id]*entities.Enemy
+	Player      player.PlayerEntity
+	Enemies     map[id.IdComponent]*enemy.EnemyEntity
 	CurrentMode WorldMode
 	PrevMode    WorldMode
 }
 
 func Default() *World {
 	return &World{
-		Player:  entities.Player{},
-		Enemies: map[components.Id]*entities.Enemy{},
+		Player:  player.PlayerEntity{},
+		Enemies: map[id.IdComponent]*enemy.EnemyEntity{},
 	}
 }

@@ -18,12 +18,10 @@ type EngineBuilder struct {
 }
 
 type EngineLoop struct {
-	assertions     []system.System
 	world          *world.World
 	meta           *meta.Meta
 	WithWorld      func(s *world.World) *EngineLoop
 	WithMeta       func(m *meta.Meta) *EngineLoop
-	WithAssertions func(systems ...system.System) *EngineLoop
 	Run            func() func()
 }
 
@@ -58,11 +56,6 @@ func Block(systems ...system.System) EngineBuilder {
 func Loop(draw *EngineBuilder, update *EngineBuilder) EngineLoop {
 	options := EngineLoop{}
 
-	options.WithAssertions = func(systems ...system.System) *EngineLoop {
-		options.assertions = systems
-		return &options
-	}
-
 	options.WithWorld = func(s *world.World) *EngineLoop {
 		options.world = s
 		return &options
@@ -80,12 +73,6 @@ func Loop(draw *EngineBuilder, update *EngineBuilder) EngineLoop {
 			rl.EndDrawing()
 
 			update.Run()
-
-			if len(options.assertions) > 0 {
-				for _, assertion := range options.assertions {
-					assertion(options.world, options.meta)
-				}
-			}
 		}
 		return func() {}
 	}
